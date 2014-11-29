@@ -67,6 +67,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\GrassBoard.cs" />
+    <Compile Include="Models\GrassCell.cs" />
+    <Compile Include="Extensions\MatrixEx.cs" />
+    <Compile Include="Models\Snake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
