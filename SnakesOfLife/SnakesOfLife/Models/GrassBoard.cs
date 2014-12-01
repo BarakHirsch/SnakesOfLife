@@ -18,11 +18,7 @@ namespace SnakesOfLife.Models
 
                 for (int j = 0; j < ColumnLength; j++)
                 {
-                    GrassCells[i][j] = new GrassCell
-                    {
-                        IsAlive = true,
-                        NeededAliveNeighborsTurnsToGrow = ParametersContainer.Current.NeededAliveNeighborsTurnsToGrow
-                    };
+                    GrassCells[i][j] = new GrassCell();
                 }
             }
         }
@@ -42,30 +38,16 @@ namespace SnakesOfLife.Models
                 {
                     var grassCell = GrassCells[i][j];
 
-                    grassCell.NeededAliveNeighborsTurnsToGrow -= predicateResult.GetNeighbors(i, j).Count(x => x);
-
-                    if (grassCell.NeededAliveNeighborsTurnsToGrow <= 0)
-                    {
-                        grassCell.IsAlive = true;
-                        grassCell.NeededAliveNeighborsTurnsToGrow = ParametersContainer.Current.NeededAliveNeighborsTurnsToGrow;
-                    }
+                    grassCell.UpdateGrowth(predicateResult.GetNeighbors(i, j).Count(x => x));
                 }
             }
         }
-    }
 
-    public class ParametersContainer
-    {
-        public static ParametersContainer Current { get; set; }
+        public bool CellEntered(int row, int column)
+        {
+            var wasAlive = GrassCells[row][column].EnteredBySnake();
 
-        public int NeededAliveNeighborsTurnsToGrow { get; set; }
-
-        public int SnakeCellsForGrow { get; set; }
-
-        public int SnakeLengthForSplit { get; set; }
-
-        public int SnakeLengthToStay { get; set; }
-
-        public int SnakeTurnToDie { get; set; }
+            return wasAlive;
+        }
     }
 }
