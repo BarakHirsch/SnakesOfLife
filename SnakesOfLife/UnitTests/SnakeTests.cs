@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SnakesOfLife.Models;
 
 namespace UnitTests
@@ -75,6 +76,36 @@ namespace UnitTests
             Assert.AreEqual(cell2, splitSnake.Locations.Dequeue());
             Assert.AreEqual(cell3, splitSnake.Locations.Dequeue());
             Assert.AreEqual(cell4, splitSnake.Locations.Dequeue());
+        }
+
+        [Test]
+        public void SnakeShortens()
+        {
+            throw new NotImplementedException();
+        } 
+        
+        [Test]
+        public void SnakeGrows()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Test]
+        public void SnakeGetsToMinimalLength()
+        {
+            throw new NotImplementedException();
+        }
+        
+        [Test]
+        public void SnakeDying()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Test]
+        public void StarvingSnakeEating()
+        {
+            throw new NotImplementedException();
         }
     }
 }

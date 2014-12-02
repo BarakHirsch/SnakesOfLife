@@ -5,6 +5,11 @@ namespace SnakesOfLife.Models
 {
     public class GrassBoard
     {
+        public GrassCell[][] GrassCells { get; private set; }
+
+        public int RowLength { get; private set; }
+        public int ColumnLength { get; private set; }
+
         public GrassBoard(int rowLength, int columnLength)
         {
             RowLength = rowLength;
@@ -18,15 +23,10 @@ namespace SnakesOfLife.Models
 
                 for (int j = 0; j < ColumnLength; j++)
                 {
-                    GrassCells[i][j] = new GrassCell();
+                    GrassCells[i][j] = new GrassCell(i,j);
                 }
             }
         }
-
-        public GrassCell[][] GrassCells { get; private set; }
-
-        public int RowLength { get; private set; }
-        public int ColumnLength { get; private set; }
 
         public void UpdateGrass()
         {
@@ -45,9 +45,16 @@ namespace SnakesOfLife.Models
 
         public bool CellEntered(int row, int column)
         {
-            var wasAlive = GrassCells[row][column].EnteredBySnake();
+            return GrassCells[row][column].EnteredBySnake();
+        }
 
-            return wasAlive;
+        public GrassCell[] GetOptionalCells(GrassCell headLocation)
+        {
+            var allCells = GrassCells.GetNeighbors(headLocation.RowIndex, headLocation.ColumnIndex).ToArray();
+
+            var aliveCells = allCells.Where(x => x.IsAlive).ToArray();
+
+            return aliveCells.Any() ? aliveCells : allCells;
         }
     }
 }

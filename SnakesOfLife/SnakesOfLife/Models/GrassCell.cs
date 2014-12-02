@@ -9,6 +9,19 @@
             get { return NeededAliveNeighborsTurnsToGrow == 0; }
         }
 
+        public int RowIndex { get; private set; }
+        public int ColumnIndex { get; private set; }
+
+        public GrassCell()
+        {
+        }
+
+        public GrassCell(int rowIndex, int columnIndex)
+        {
+            RowIndex = rowIndex;
+            ColumnIndex = columnIndex;
+        }
+
         public bool EnteredBySnake()
         {
             if (!IsAlive)
