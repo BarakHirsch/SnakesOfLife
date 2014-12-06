@@ -17,12 +17,12 @@ namespace SnakesOfLife.Models
 
         public bool ShouldSplit
         {
-            get { return Locations.Count == ParametersContainer.Current.SnakeLengthForSplit; }
+            get { return Locations.Count == Params.Instance.SnakeLengthForSplit; }
         }
 
         public bool IsStarving
         {
-            get { return TurnsHasNotEaten > 0 && Locations.Count == ParametersContainer.Current.SnakeLengthToStay; }
+            get { return TurnsHasNotEaten > 0 && Locations.Count == Params.Instance.SnakeLengthToStay; }
         }
 
         public Snake()
@@ -50,7 +50,7 @@ namespace SnakesOfLife.Models
         {
             CheckGrassEaten(HeadLocation.EnteredBySnake());
 
-            if (TurnsHasNotEaten == ParametersContainer.Current.SnakeTurnToDie)
+            if (TurnsHasNotEaten == Params.Instance.SnakeTurnToDie)
             {
                 return true;
             }
@@ -77,7 +77,7 @@ namespace SnakesOfLife.Models
 
             CheckGrassEaten(cell.EnteredBySnake());
 
-            if (GrassCellsEaten != ParametersContainer.Current.SnakeCellsForGrow)
+            if (GrassCellsEaten != Params.Instance.SnakeCellsForGrow)
             {
                 Locations.Dequeue();
             }

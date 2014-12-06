@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using SnakesOfLife.Extensions;
 
 namespace SnakesOfLife.Models
@@ -17,6 +18,8 @@ namespace SnakesOfLife.Models
 
             GrassCells = new GrassCell[RowLength][];
 
+            //Randomly select cells to become alive on the first generation (i.e. UI load)
+            Random rand = new Random();
             for (int i = 0; i < RowLength; i++)
             {
                 GrassCells[i] = new GrassCell[ColumnLength];
@@ -24,8 +27,14 @@ namespace SnakesOfLife.Models
                 for (int j = 0; j < ColumnLength; j++)
                 {
                     GrassCells[i][j] = new GrassCell(i,j);
+                    if (rand.NextDouble() <= 0.1)
+                    {
+                        GrassCells[i][j].IsAlive = true;
+                    }
                 }
             }
+
+            
         }
 
         public void UpdateGrass()

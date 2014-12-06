@@ -9,14 +9,11 @@ namespace UnitTests
         [SetUp]
         public void SetUp()
         {
-            ParametersContainer.Current = new ParametersContainer
-            {
-                NeededAliveNeighborsTurnsToGrow = 3,
-                SnakeCellsForGrow = 1,
-                SnakeLengthForSplit = 8,
-                SnakeLengthToStay = 2,
-                SnakeTurnToDie = 2
-            };
+            Params.Instance.NeededAliveNeighborsTurnsToGrow = 3;
+            Params.Instance.SnakeCellsForGrow = 1;
+            Params.Instance.SnakeLengthForSplit = 8;
+            Params.Instance.SnakeLengthToStay = 2;
+            Params.Instance.SnakeTurnToDie = 2;
         }
 
         [Test]

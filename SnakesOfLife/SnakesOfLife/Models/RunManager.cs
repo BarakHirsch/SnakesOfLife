@@ -21,7 +21,7 @@ namespace SnakesOfLife.Models
 
             foreach (var snake in Snakes.ToArray())
             {
-                if (snake.TurnsHasNotEaten == ParametersContainer.Current.SnakeTurnToDie)
+                if (snake.TurnsHasNotEaten == Params.Instance.SnakeTurnToDie)
                 {
                     Snakes.Remove(snake);
                 }
