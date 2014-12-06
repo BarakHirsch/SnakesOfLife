@@ -9,12 +9,14 @@ namespace UnitTests
         [SetUp]
         public void SetUp()
         {
-            Params.Instance.NeededAliveNeighborsTurnsToGrow = 3;
-            Params.Instance.SnakeCellsForGrow = 1;
-            Params.Instance.SnakeLengthForSplit = 8;
-            Params.Instance.SnakeLengthToStay = 2;
-            Params.Instance.SnakeTurnToDie = 2;
-
+            Params.Current = new Params
+            {
+                NeededAliveNeighborsTurnsToGrow = 3,
+                SnakeCellsForGrow = 1,
+                SnakeLengthForSplit = 8,
+                SnakeLengthToStop = 2,
+                SnakeTurnToDie = 2
+            };
         }
 
         [Test]
@@ -34,9 +36,9 @@ namespace UnitTests
             grassCell.EnteredBySnake();
 
             Assert.That(!grassCell.IsAlive);
-            Assert.AreEqual(Params.Instance.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
+            Assert.AreEqual(Params.Current.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
 
-            grassCell.UpdateGrowth(Params.Instance.NeededAliveNeighborsTurnsToGrow - 1);
+            grassCell.UpdateGrowth(Params.Current.NeededAliveNeighborsTurnsToGrow - 1);
 
             Assert.That(!grassCell.IsAlive);
             Assert.AreEqual(1, grassCell.NeededAliveNeighborsTurnsToGrow);
@@ -50,9 +52,9 @@ namespace UnitTests
             grassCell.EnteredBySnake();
 
             Assert.That(!grassCell.IsAlive);
-            Assert.AreEqual(Params.Instance.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
+            Assert.AreEqual(Params.Current.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
 
-            grassCell.UpdateGrowth(Params.Instance.NeededAliveNeighborsTurnsToGrow);
+            grassCell.UpdateGrowth(Params.Current.NeededAliveNeighborsTurnsToGrow);
 
             Assert.That(grassCell.IsAlive);
             Assert.AreEqual(0, grassCell.NeededAliveNeighborsTurnsToGrow);
@@ -66,9 +68,9 @@ namespace UnitTests
             grassCell.EnteredBySnake();
 
             Assert.That(!grassCell.IsAlive);
-            Assert.AreEqual(Params.Instance.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
+            Assert.AreEqual(Params.Current.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
 
-            grassCell.UpdateGrowth(Params.Instance.NeededAliveNeighborsTurnsToGrow + 1);
+            grassCell.UpdateGrowth(Params.Current.NeededAliveNeighborsTurnsToGrow + 1);
 
             Assert.That(grassCell.IsAlive);
             Assert.AreEqual(0, grassCell.NeededAliveNeighborsTurnsToGrow);

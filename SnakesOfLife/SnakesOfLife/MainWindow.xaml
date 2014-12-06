@@ -1,24 +1,18 @@
 ﻿<Window x:Class="SnakesOfLife.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:snakesOfLife="clr-namespace:SnakesOfLife"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
-        <Style x:Key="GrassCellStyle" TargetType="{x:Type Ellipse}">
-            <Setter Property="Opacity" Value="{Binding Path=IsAlive}" />
-            <Setter Property="Fill" >
-                <Setter.Value>
-                    <RadialGradientBrush GradientOrigin="0.496,1.052">
-                        <RadialGradientBrush.RelativeTransform>
-                            <TransformGroup>
-                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
-                                <TranslateTransform X="0.02" Y="0.3"/>
-                            </TransformGroup>
-                        </RadialGradientBrush.RelativeTransform>
-                        <GradientStop Offset="1" Color="#FF1CC118"/>
-                        <GradientStop Offset="0.4" Color="#FF136C11"/>
-                    </RadialGradientBrush>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="GrassCellStyle" TargetType="{x:Type Image}">
+            <Setter Property="Source" Value="/Resources/AliveGrass.png" />
+            <Setter Property="Stretch" Value="Fill"></Setter>
+            <Setter Property="Margin" Value="-1" />
+            <Style.Triggers>
+                <DataTrigger Value="False" Binding="{Binding IsAlive}" >
+                    <Setter Property="Source" Value="/Resources/NoGrass.png" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
 
@@ -28,7 +22,7 @@
             <Button x:Name="StopButton" Margin="5" Click="StopButtonClick">Stop</Button>
         </StackPanel>
 
-        <Grid x:Name="MainGrid" Background="GhostWhite" />
+        <Grid x:Name="MainGrid" Background="GhostWhite"  />
     </DockPanel>
 
 

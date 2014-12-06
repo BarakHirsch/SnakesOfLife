@@ -10,26 +10,23 @@ namespace SnakesOfLife.Models
 
         public Queue<GrassCell> Locations { get; private set; }
 
-        public GrassCell HeadLocation
-        {
-            get { return Locations.Peek(); }
-        }
+        public GrassCell HeadLocation { get; set; }
 
         public bool ShouldSplit
         {
-            get { return Locations.Count == Params.Instance.SnakeLengthForSplit; }
+            get { return Locations.Count == Params.Current.SnakeLengthForSplit; }
         }
 
         public bool IsStarving
         {
-            get { return TurnsHasNotEaten > 0 && Locations.Count == Params.Instance.SnakeLengthToStay; }
+            get { return TurnsHasNotEaten > 0 && Locations.Count == Params.Current.SnakeLengthToStop; }
         }
 
         public Snake()
         {
             Locations = new Queue<GrassCell>();
         }
-
+        
         public Snake SplitSnake()
         {
             var originalLength = Locations.Count;
@@ -50,7 +47,7 @@ namespace SnakesOfLife.Models
         {
             CheckGrassEaten(HeadLocation.EnteredBySnake());
 
-            if (TurnsHasNotEaten == Params.Instance.SnakeTurnToDie)
+            if (TurnsHasNotEaten == Params.Current.SnakeTurnToDie)
             {
                 return true;
             }
@@ -73,17 +70,25 @@ namespace SnakesOfLife.Models
 
         public void MoveSnake(GrassCell cell)
         {
+            HeadLocation = cell;
+
             Locations.Enqueue(cell);
 
             CheckGrassEaten(cell.EnteredBySnake());
 
-            if (GrassCellsEaten != Params.Instance.SnakeCellsForGrow)
+            if (GrassCellsEaten != Params.Current.SnakeCellsForGrow)
             {
                 Locations.Dequeue();
             }
             else
             {
                 GrassCellsEaten = 0;
+            }
+
+            if (TurnsHasNotEaten == Params.Current.SnakeTurnsToShrink)
+            {
+                Locations.Dequeue();
+                TurnsHasNotEaten = 0;
             }
         }
     }
