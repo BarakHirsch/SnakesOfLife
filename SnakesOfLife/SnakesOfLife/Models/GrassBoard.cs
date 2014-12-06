@@ -27,8 +27,6 @@ namespace SnakesOfLife.Models
                     GrassCells[i][j] = new GrassCell(i,j);                   
                 }
             }
-
-            
         }
 
         public void UpdateGrass()

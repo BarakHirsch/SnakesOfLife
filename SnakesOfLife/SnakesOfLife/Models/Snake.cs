@@ -37,7 +37,7 @@ namespace SnakesOfLife.Models
 
             for (var i = 0; i < partsToMove; i++)
             {
-                splitSnake.Locations.Enqueue(Locations.Dequeue());
+                splitSnake.AddNewCell(Locations.Dequeue());
             }
 
             return splitSnake;
@@ -70,9 +70,7 @@ namespace SnakesOfLife.Models
 
         public void MoveSnake(GrassCell cell)
         {
-            HeadLocation = cell;
-
-            Locations.Enqueue(cell);
+            AddNewCell(cell);
 
             CheckGrassEaten(cell.EnteredBySnake());
 
@@ -90,6 +88,12 @@ namespace SnakesOfLife.Models
                 Locations.Dequeue();
                 TurnsHasNotEaten = 0;
             }
+        }
+
+        public void AddNewCell(GrassCell cell)
+        {
+            HeadLocation = cell;
+            Locations.Enqueue(cell);
         }
     }
 }

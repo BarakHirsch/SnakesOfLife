@@ -14,7 +14,7 @@ namespace SnakesOfLife
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        const int GridSize = 10;
+        const int GridSize = 20;
         
         // 100 millisecs.
         readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 100);
@@ -44,10 +44,7 @@ namespace SnakesOfLife
 
         private void TimerTick(object sender, EventArgs e)
         {
-            // Update the grid and cells.
             var haveMoreSnakes = _runManager.RunTurn();
-
-            MoveSnakes();
 
             if (!haveMoreSnakes)
             {
@@ -57,19 +54,16 @@ namespace SnakesOfLife
             }
         }
 
-        private void MoveSnakes()
-        {
-        }
-
         private void InitializeGrid()
         {
             Params.Current = new Params
             {
-                NeededAliveNeighborsTurnsToGrow = 3,
-                SnakeCellsForGrow = 1,
+                NeededAliveNeighborsTurnsToGrow = 40,
+                SnakeCellsForGrow = 5,
                 SnakeLengthForSplit = 8,
                 SnakeLengthToStop = 2,
-                SnakeTurnToDie = 2
+                SnakeTurnToDie = 2,
+                SnakeTurnsToShrink = 2
             };
 
             _runManager = new RunManager(GridSize, GridSize);
