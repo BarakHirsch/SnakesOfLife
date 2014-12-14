@@ -2,28 +2,33 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:snakesOfLife="clr-namespace:SnakesOfLife"
-        Title="MainWindow" Height="350" Width="525">
-    <Window.Resources>
-        <Style x:Key="GrassCellStyle" TargetType="{x:Type Image}">
-            <Setter Property="Source" Value="/Resources/AliveGrass.png" />
-            <Setter Property="Stretch" Value="Fill"></Setter>
-            <Setter Property="Margin" Value="-1" />
-            <Style.Triggers>
-                <DataTrigger Value="False" Binding="{Binding IsAlive}" >
-                    <Setter Property="Source" Value="/Resources/NoGrass.png" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
+        Title="MainWindow" Height="600" Width="600">
+  <Window.Resources>
+    <Style x:Key="GrassCellStyle" TargetType="{x:Type Image}">
+      <Setter Property="Source" Value="/Resources/AliveGrass.png" />
+      <Setter Property="Stretch" Value="Fill" />
+      <Setter Property="Margin" Value="-1" />
+      <Style.Triggers>
+        <DataTrigger Value="False" Binding="{Binding IsAlive}">
+          <Setter Property="Source" Value="/Resources/NoGrass.png" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style x:Key="SnakePartStyle" TargetType="Ellipse">
+      <Setter Property="Fill" Value="Blue" />
+      <Setter Property="Stroke" Value="Black" />
+      <Setter Property="StrokeThickness" Value="1" />
+    </Style>
+  </Window.Resources>
 
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="StackPanel">
-            <Button x:Name="StartButton" Margin="5" Click="StartButtonClick">Start</Button>
-            <Button x:Name="StopButton" Margin="5" Click="StopButtonClick">Stop</Button>
-        </StackPanel>
+  <DockPanel>
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="StackPanel">
+      <Button x:Name="StartButton" Margin="5" Click="StartButtonClick">Start</Button>
+      <Button x:Name="StopButton" Margin="5" Click="StopButtonClick">Stop</Button>
+    </StackPanel>
 
-        <Grid x:Name="MainGrid" Background="GhostWhite"  />
-    </DockPanel>
+    <Grid x:Name="MainGrid" Background="GhostWhite" />
+  </DockPanel>
 
 
 </Window>

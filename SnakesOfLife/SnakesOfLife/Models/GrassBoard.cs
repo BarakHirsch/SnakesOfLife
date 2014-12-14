@@ -51,7 +51,7 @@ namespace SnakesOfLife.Models
 
         public GrassCell[] GetOptionalCells(GrassCell headLocation)
         {
-            var allCells = GrassCells.GetNeighbors(headLocation.RowIndex, headLocation.ColumnIndex).ToArray();
+            var allCells = GrassCells.GetDirations(headLocation.RowIndex, headLocation.ColumnIndex).ToArray();
 
             var aliveCells = allCells.Where(x => x.IsAlive).ToArray();
 

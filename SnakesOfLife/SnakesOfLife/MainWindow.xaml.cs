@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using SnakesOfLife.Annotations;
 using SnakesOfLife.Models;
@@ -17,16 +20,18 @@ namespace SnakesOfLife
         const int GridSize = 20;
         
         // 100 millisecs.
-        readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 100);
+        readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 50);
               
         readonly DispatcherTimer _timer = new DispatcherTimer();
 
         private RunManager _runManager;
+        private readonly List<UIElement> _currentSnakeParts;
 
         public MainWindow()
         {
             InitializeComponent();
             Loaded += Window_Loaded;
+            _currentSnakeParts = new List<UIElement>();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -46,11 +51,39 @@ namespace SnakesOfLife
         {
             var haveMoreSnakes = _runManager.RunTurn();
 
+            DrawSnakes(_runManager.Snakes);
+
             if (!haveMoreSnakes)
             {
                 MessageBox.Show("There are no more snakes alive, Game over");
 
                 _timer.Stop();
+            }
+        }
+
+        private void DrawSnakes(IEnumerable<Snake> snakes)
+        {
+            foreach (var uiElement in _currentSnakeParts)
+            {
+                MainGrid.Children.Remove(uiElement);
+            }
+
+            _currentSnakeParts.Clear();
+
+            foreach (var snake in snakes)
+            {
+                foreach (var grassCell in snake.Locations)
+                {
+                    var snakePart = new Ellipse();
+
+                    Grid.SetRow(snakePart, grassCell.RowIndex);
+                    Grid.SetColumn(snakePart, grassCell.ColumnIndex);
+
+                    snakePart.Style = Resources["SnakePartStyle"] as Style;
+
+                    MainGrid.Children.Add(snakePart);
+                    _currentSnakeParts.Add(snakePart);
+                }
             }
         }
 
@@ -88,11 +121,9 @@ namespace SnakesOfLife
 
                     image.DataContext = _runManager.GrassBoard.GrassCells[row][column];
 
-                    // Add the ellipse to the grid cell.
-                    MainGrid.Children.Add(image);
-
-                    // Set the style of the ellipse using the style information defined in the XAML file.
                     image.Style = Resources["GrassCellStyle"] as Style;
+                    
+                    MainGrid.Children.Add(image);
                 }
             }
         }
