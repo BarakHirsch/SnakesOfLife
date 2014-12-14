@@ -89,7 +89,7 @@ namespace SnakesOfLife
 
         private void InitializeGrid()
         {
-            Params.Current = new Params
+            var currParams = new Params
             {
                 NeededAliveNeighborsTurnsToGrow = 40,
                 SnakeCellsForGrow = 5,
@@ -99,7 +99,7 @@ namespace SnakesOfLife
                 SnakeTurnsToShrink = 2
             };
 
-            _runManager = new RunManager(GridSize, GridSize);
+            _runManager = new RunManager(currParams, GridSize, GridSize);
 
             //Generate the grid
             for (int i = 0; i < GridSize; i++)

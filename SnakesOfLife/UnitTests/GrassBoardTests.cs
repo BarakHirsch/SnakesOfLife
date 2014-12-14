@@ -6,10 +6,12 @@ namespace UnitTests
     [TestFixture]
     public class GrassBoardTests
     {
+        public Params CurrentParams { get; set; }
+
         [SetUp]
         public void SetUp()
         {
-            Params.Current = new Params
+            CurrentParams = new Params
             {
                 NeededAliveNeighborsTurnsToGrow = 3,
                 SnakeCellsForGrow = 1,
@@ -22,7 +24,7 @@ namespace UnitTests
         [Test]
         public void EnterCell()
         {
-            var grassBoard = new GrassBoard(5, 5);
+            var grassBoard = new GrassBoard(CurrentParams, 5, 5);
 
             grassBoard.CellEntered(0, 0);
 
@@ -32,7 +34,7 @@ namespace UnitTests
         [Test]
         public void GrowInOneTurn()
         {
-            var grassBoard = new GrassBoard(5, 5);
+            var grassBoard = new GrassBoard(CurrentParams, 5, 5);
 
             grassBoard.CellEntered(0, 0);
 
@@ -44,7 +46,7 @@ namespace UnitTests
         [Test]
         public void GrowInTwoTurns()
         {
-            var grassBoard = new GrassBoard(5, 5);
+            var grassBoard = new GrassBoard(CurrentParams, 5, 5);
 
             grassBoard.CellEntered(0, 0);
             grassBoard.CellEntered(0, 1);
@@ -63,7 +65,7 @@ namespace UnitTests
         [Test]
         public void NoGrass()
         {
-            var grassBoard = new GrassBoard(2, 2);
+            var grassBoard = new GrassBoard(CurrentParams, 2, 2);
 
             grassBoard.CellEntered(0, 0);
             grassBoard.CellEntered(0, 1);

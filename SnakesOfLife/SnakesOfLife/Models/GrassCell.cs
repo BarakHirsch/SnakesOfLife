@@ -8,6 +8,8 @@ namespace SnakesOfLife.Models
     {
         private int _neededAliveNeighborsTurnsToGrow;
 
+        public Params Params { get; private set; }
+
         public int NeededAliveNeighborsTurnsToGrow
         {
             get { return _neededAliveNeighborsTurnsToGrow; }
@@ -28,20 +30,16 @@ namespace SnakesOfLife.Models
         public int RowIndex { get; private set; }
         public int ColumnIndex { get; private set; }
 
-        public GrassCell()
+        public GrassCell(Params currParams, int rowIndex, int columnIndex)
         {
-        }
-
-        public GrassCell(int rowIndex, int columnIndex)
-        {
+            Params = currParams;
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
-        }
-
-        public GrassCell(int rowIndex, int columnIndex, bool alive)
+        } 
+        
+        public GrassCell(Params currParams)
         {
-            RowIndex = rowIndex;
-            ColumnIndex = columnIndex;
+            Params = currParams;
         }
 
         public bool EnteredBySnake()
@@ -51,7 +49,7 @@ namespace SnakesOfLife.Models
                 return false;
             }
 
-            NeededAliveNeighborsTurnsToGrow = Params.Current.NeededAliveNeighborsTurnsToGrow;
+            NeededAliveNeighborsTurnsToGrow = Params.NeededAliveNeighborsTurnsToGrow;
 
             return true;
         }
@@ -69,7 +67,6 @@ namespace SnakesOfLife.Models
             {
                 NeededAliveNeighborsTurnsToGrow = 0;
             }
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -6,10 +6,12 @@ namespace UnitTests
     [TestFixture]
     public class SnakeTests
     {
+        public Params CurrentParams { get; set; }
+
         [SetUp]
         public void SetUp()
         {
-            Params.Current = new Params
+            CurrentParams = new Params
             {
                 NeededAliveNeighborsTurnsToGrow = 3,
                 SnakeCellsForGrow = 2,
@@ -23,14 +25,14 @@ namespace UnitTests
         [Test]
         public void SplitEvenLength()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
-            var cell3 = new GrassCell();
-            var cell4 = new GrassCell();
-            var cell5 = new GrassCell();
-            var cell6 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
+            var cell3 = new GrassCell(CurrentParams);
+            var cell4 = new GrassCell(CurrentParams);
+            var cell5 = new GrassCell(CurrentParams);
+            var cell6 = new GrassCell(CurrentParams);
             
             snake.Locations.Enqueue(cell1);
             snake.Locations.Enqueue(cell2);
@@ -57,15 +59,15 @@ namespace UnitTests
         [Test]
         public void SplitOddLength()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
-            var cell3 = new GrassCell();
-            var cell4 = new GrassCell();
-            var cell5 = new GrassCell();
-            var cell6 = new GrassCell();
-            var cell7 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
+            var cell3 = new GrassCell(CurrentParams);
+            var cell4 = new GrassCell(CurrentParams);
+            var cell5 = new GrassCell(CurrentParams);
+            var cell6 = new GrassCell(CurrentParams);
+            var cell7 = new GrassCell(CurrentParams);
 
             snake.Locations.Enqueue(cell1);
             snake.Locations.Enqueue(cell2);
@@ -94,20 +96,20 @@ namespace UnitTests
         [Test]
         public void SnakeShortens()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
-            var cell3 = new GrassCell();
-            var cell4 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
+            var cell3 = new GrassCell(CurrentParams);
+            var cell4 = new GrassCell(CurrentParams);
 
-            var cell5 = new GrassCell();
+            var cell5 = new GrassCell(CurrentParams);
             cell5.EnteredBySnake();
 
-            var cell6 = new GrassCell();
+            var cell6 = new GrassCell(CurrentParams);
             cell6.EnteredBySnake();
 
-            var cell7 = new GrassCell();
+            var cell7 = new GrassCell(CurrentParams);
             cell7.EnteredBySnake();
 
             snake.Locations.Enqueue(cell1);
@@ -129,16 +131,16 @@ namespace UnitTests
         [Test]
         public void SnakeGrows()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
-            var cell3 = new GrassCell();
-            var cell4 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
+            var cell3 = new GrassCell(CurrentParams);
+            var cell4 = new GrassCell(CurrentParams);
 
-            var cell5 = new GrassCell();
-            var cell6 = new GrassCell();
-            var cell7 = new GrassCell();
+            var cell5 = new GrassCell(CurrentParams);
+            var cell6 = new GrassCell(CurrentParams);
+            var cell7 = new GrassCell(CurrentParams);
 
             snake.Locations.Enqueue(cell1);
             snake.Locations.Enqueue(cell2);
@@ -161,19 +163,19 @@ namespace UnitTests
         [Test]
         public void SnakeGetsToMinimalLength()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
-            var cell3 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
+            var cell3 = new GrassCell(CurrentParams);
 
-            var cell5 = new GrassCell();
+            var cell5 = new GrassCell(CurrentParams);
             cell5.EnteredBySnake();
 
-            var cell6 = new GrassCell();
+            var cell6 = new GrassCell(CurrentParams);
             cell6.EnteredBySnake();
 
-            var cell7 = new GrassCell();
+            var cell7 = new GrassCell(CurrentParams);
             cell7.EnteredBySnake();
 
             snake.Locations.Enqueue(cell1);
@@ -184,7 +186,7 @@ namespace UnitTests
             snake.MoveSnake(cell6);
             snake.MoveSnake(cell7);
 
-            Assert.AreEqual(Params.Current.SnakeLengthToStop, snake.Locations.Count);
+            Assert.AreEqual(CurrentParams.SnakeLengthToStop, snake.Locations.Count);
 
             Assert.That(snake.IsStarving);
 
@@ -195,12 +197,12 @@ namespace UnitTests
         [Test]
         public void SnakeDying()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
 
-            var cell3 = new GrassCell();
+            var cell3 = new GrassCell(CurrentParams);
             cell3.EnteredBySnake();
 
             snake.Locations.Enqueue(cell1);
@@ -227,12 +229,12 @@ namespace UnitTests
         [Test]
         public void StarvingSnakeEating()
         {
-            var snake = new Snake();
+            var snake = new Snake(CurrentParams);
 
-            var cell1 = new GrassCell();
-            var cell2 = new GrassCell();
+            var cell1 = new GrassCell(CurrentParams);
+            var cell2 = new GrassCell(CurrentParams);
 
-            var cell3 = new GrassCell();
+            var cell3 = new GrassCell(CurrentParams);
             cell3.EnteredBySnake();
 
             snake.Locations.Enqueue(cell1);
@@ -244,7 +246,7 @@ namespace UnitTests
 
             Assert.That(snake.IsStarving);
 
-            cell3.UpdateGrowth(Params.Current.NeededAliveNeighborsTurnsToGrow);
+            cell3.UpdateGrowth(CurrentParams.NeededAliveNeighborsTurnsToGrow);
 
             snake.StarvingSnakeTurn();
 

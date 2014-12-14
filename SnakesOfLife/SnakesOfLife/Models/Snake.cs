@@ -7,23 +7,24 @@ namespace SnakesOfLife.Models
     {
         public int GrassCellsEaten { get; set; }
         public int TurnsHasNotEaten { get; set; }
-
         public Queue<GrassCell> Locations { get; private set; }
-
         public GrassCell HeadLocation { get; set; }
+
+        public Params Params { get; private set; }
 
         public bool ShouldSplit
         {
-            get { return Locations.Count == Params.Current.SnakeLengthForSplit; }
+            get { return Locations.Count == Params.SnakeLengthForSplit; }
         }
 
         public bool IsStarving
         {
-            get { return TurnsHasNotEaten > 0 && Locations.Count == Params.Current.SnakeLengthToStop; }
+            get { return TurnsHasNotEaten > 0 && Locations.Count == Params.SnakeLengthToStop; }
         }
 
-        public Snake()
+        public Snake(Params currParams)
         {
+            Params = currParams;
             Locations = new Queue<GrassCell>();
         }
         
@@ -33,7 +34,7 @@ namespace SnakesOfLife.Models
 
             var partsToMove = (int) Math.Ceiling(originalLength/2.0);
 
-            var splitSnake = new Snake();
+            var splitSnake = new Snake(Params);
 
             for (var i = 0; i < partsToMove; i++)
             {
@@ -47,7 +48,7 @@ namespace SnakesOfLife.Models
         {
             CheckGrassEaten(HeadLocation.EnteredBySnake());
 
-            if (TurnsHasNotEaten == Params.Current.SnakeTurnToDie)
+            if (TurnsHasNotEaten == Params.SnakeTurnToDie)
             {
                 return true;
             }
@@ -74,7 +75,7 @@ namespace SnakesOfLife.Models
 
             CheckGrassEaten(cell.EnteredBySnake());
 
-            if (GrassCellsEaten != Params.Current.SnakeCellsForGrow)
+            if (GrassCellsEaten != Params.SnakeCellsForGrow)
             {
                 Locations.Dequeue();
             }
@@ -83,7 +84,7 @@ namespace SnakesOfLife.Models
                 GrassCellsEaten = 0;
             }
 
-            if (TurnsHasNotEaten == Params.Current.SnakeTurnsToShrink)
+            if (TurnsHasNotEaten == Params.SnakeTurnsToShrink)
             {
                 Locations.Dequeue();
                 TurnsHasNotEaten = 0;

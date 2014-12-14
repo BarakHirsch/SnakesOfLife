@@ -11,8 +11,11 @@ namespace SnakesOfLife.Models
         public int RowLength { get; private set; }
         public int ColumnLength { get; private set; }
 
-        public GrassBoard(int rowLength, int columnLength)
+        public Params Params { get; private set; }
+
+        public GrassBoard(Params currParams, int rowLength, int columnLength)
         {
+            Params = currParams;
             RowLength = rowLength;
             ColumnLength = columnLength;
 
@@ -24,7 +27,7 @@ namespace SnakesOfLife.Models
 
                 for (int j = 0; j < ColumnLength; j++)
                 {
-                    GrassCells[i][j] = new GrassCell(i,j);                   
+                    GrassCells[i][j] = new GrassCell(Params, i, j);
                 }
             }
         }

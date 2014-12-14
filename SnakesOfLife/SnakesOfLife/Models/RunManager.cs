@@ -12,14 +12,17 @@ namespace SnakesOfLife.Models
         public GrassBoard GrassBoard { get; set; }
         public int TurnsCount { get; private set; }
 
-        public RunManager(int rowLength, int columnLength)
+        public Params Params { get; private set; }
+
+        public RunManager(Params currParams, int rowLength, int columnLength)
         {
+            Params = currParams;
+            
             _random = new Random();
-
             Snakes = new List<Snake>();
-            GrassBoard = new GrassBoard(rowLength, columnLength);
+            GrassBoard = new GrassBoard(Params, rowLength, columnLength);
 
-            var snake = new Snake();
+            var snake = new Snake(Params);
 
             var grassCell = GrassBoard.GrassCells[_random.Next(rowLength)][_random.Next(columnLength)];
             snake.AddNewCell(grassCell);
@@ -53,7 +56,7 @@ namespace SnakesOfLife.Models
         {
             foreach (var snake in Snakes.ToArray())
             {
-                if (snake.TurnsHasNotEaten == Params.Current.SnakeTurnToDie)
+                if (snake.TurnsHasNotEaten == Params.SnakeTurnToDie)
                 {
                     Snakes.Remove(snake);
                 }
@@ -90,7 +93,7 @@ namespace SnakesOfLife.Models
 
         public void AddSnake()
         {
-            var snake = new Snake();
+            var snake = new Snake(Params);
 
             var grassCells = GrassBoard.GrassCells[0];
             snake.Locations.Enqueue(grassCells[0]);
