@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,34 +16,48 @@ namespace SnakesOfLife
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        const int GridSize = 20;
-        
-        // 100 millisecs.
-        readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 50);
-              
-        readonly DispatcherTimer _timer = new DispatcherTimer();
+        private const int GridSize = 20;
 
+        public Params CurrentParams { get; set; }
         private RunManager _runManager;
+
+        // 100 millisecs.
+        private readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 50);
+
+        private readonly DispatcherTimer _timer = new DispatcherTimer();
+
         private readonly List<UIElement> _currentSnakeParts;
+        private readonly Image[,] _imageGrid;
+
 
         public MainWindow()
         {
+            CurrentParams = new Params
+            {
+                NeededAliveNeighborsTurnsToGrow = 40,
+                SnakeCellsForGrow = 5,
+                SnakeLengthForSplit = 8,
+                SnakeLengthToStop = 2,
+                SnakeTurnToDie = 2,
+                SnakeTurnsToShrink = 2
+            };
+
             InitializeComponent();
             Loaded += Window_Loaded;
             _currentSnakeParts = new List<UIElement>();
+            _imageGrid = new Image[GridSize, GridSize];
+
+
+            InitializeGrid();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Sets up the display grid.
-            InitializeGrid();
-
             //Determines what method should be called on every timer tick.
             _timer.Tick += TimerTick;
 
             //Sets the timer interval.
             _timer.Interval = _timerInterval;
-
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -89,18 +102,6 @@ namespace SnakesOfLife
 
         private void InitializeGrid()
         {
-            var currParams = new Params
-            {
-                NeededAliveNeighborsTurnsToGrow = 40,
-                SnakeCellsForGrow = 5,
-                SnakeLengthForSplit = 8,
-                SnakeLengthToStop = 2,
-                SnakeTurnToDie = 2,
-                SnakeTurnsToShrink = 2
-            };
-
-            _runManager = new RunManager(currParams, GridSize, GridSize);
-
             //Generate the grid
             for (int i = 0; i < GridSize; i++)
             {
@@ -119,17 +120,32 @@ namespace SnakesOfLife
                     Grid.SetColumn(image, column);
                     Grid.SetRow(image, row);
 
-                    image.DataContext = _runManager.GrassBoard.GrassCells[row][column];
-
                     image.Style = Resources["GrassCellStyle"] as Style;
-                    
+
+                    _imageGrid[row, column] = image;
+
                     MainGrid.Children.Add(image);
+                }
+            }
+        }
+
+        private void StartNewRun(Params currParams)
+        {
+            _runManager = new RunManager(currParams, GridSize, GridSize);
+
+            for (int row = 0; row < GridSize; row++)
+            {
+                for (int column = 0; column < GridSize; column++)
+                {
+                    _imageGrid[row, column].DataContext = _runManager.GrassBoard.GrassCells[row][column];
                 }
             }
         }
 
         private void StartButtonClick(object sender, RoutedEventArgs e)
         {
+            StartNewRun(CurrentParams);
+
             _timer.Start();
         }
 
