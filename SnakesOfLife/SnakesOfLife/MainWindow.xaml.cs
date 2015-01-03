@@ -16,7 +16,7 @@ namespace SnakesOfLife
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private const int GridSize = 20;
+        private const int GridSize = 10;
 
         public Params CurrentParams { get; set; }
         private RunManager _runManager;
@@ -74,32 +74,6 @@ namespace SnakesOfLife
             }
         }
 
-        private void DrawSnakes(IEnumerable<Snake> snakes)
-        {
-            foreach (var uiElement in _currentSnakeParts)
-            {
-                MainGrid.Children.Remove(uiElement);
-            }
-
-            _currentSnakeParts.Clear();
-
-            foreach (var snake in snakes)
-            {
-                foreach (var grassCell in snake.Locations)
-                {
-                    var snakePart = new Ellipse();
-
-                    Grid.SetRow(snakePart, grassCell.RowIndex);
-                    Grid.SetColumn(snakePart, grassCell.ColumnIndex);
-
-                    snakePart.Style = Resources["SnakePartStyle"] as Style;
-
-                    MainGrid.Children.Add(snakePart);
-                    _currentSnakeParts.Add(snakePart);
-                }
-            }
-        }
-
         private void InitializeGrid()
         {
             //Generate the grid
@@ -127,6 +101,39 @@ namespace SnakesOfLife
                     MainGrid.Children.Add(image);
                 }
             }
+        }
+
+        private void DrawSnakes(IEnumerable<Snake> snakes)
+        {
+            foreach (var uiElement in _currentSnakeParts)
+            {
+                MainGrid.Children.Remove(uiElement);
+            }
+
+            _currentSnakeParts.Clear();
+
+            foreach (var snake in snakes)
+            {
+                foreach (var grassCell in snake.Locations)
+                {
+                    var snakePart = new Ellipse();
+
+                    Grid.SetRow(snakePart, grassCell.RowIndex);
+                    Grid.SetColumn(snakePart, grassCell.ColumnIndex);
+
+                    snakePart.Style = Resources["SnakePartStyle"] as Style;
+
+                    MainGrid.Children.Add(snakePart);
+                    _currentSnakeParts.Add(snakePart);
+                }
+            }
+        }
+
+        private void SimulationButtonClick(object sender, RoutedEventArgs e)
+        {
+            var simulationRunner = new SimulationRunner(CurrentParams, GridSize, GridSize);
+
+            simulationRunner.RunSimulation();
         }
 
         private void StartNewRun(Params currParams)

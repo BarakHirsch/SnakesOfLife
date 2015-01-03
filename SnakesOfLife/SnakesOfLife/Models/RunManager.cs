@@ -17,7 +17,7 @@ namespace SnakesOfLife.Models
         public RunManager(Params currParams, int rowLength, int columnLength)
         {
             Params = currParams;
-            
+
             _random = new Random();
             Snakes = new List<Snake>();
             GrassBoard = new GrassBoard(Params, rowLength, columnLength);
@@ -34,6 +34,18 @@ namespace SnakesOfLife.Models
             }
 
             Snakes.Add(snake);
+        }
+
+        public int RunToEnd()
+        {
+            bool notEnded;
+
+            do
+            {
+                notEnded = RunTurn();
+            } while (notEnded);
+
+            return TurnsCount;
         }
 
         public bool RunTurn()

@@ -72,7 +72,8 @@
         <Label Content="Turns not eaten to shrink:" Grid.Row="5" Grid.Column="0" />
         <TextBox Text="{Binding SnakeTurnsToShrink}" Grid.Row="5" Grid.Column="1" />
 
-        <Button Grid.Row="6" Grid.Column="0" x:Name="StartButton" Margin="5,2" Click="StartButtonClick">Start new simulation</Button>
+        <Button Grid.Row="6" Grid.Column="0" x:Name="StartButton" Margin="5,2" Click="StartButtonClick">Start view simulation</Button>
+        <Button Grid.Row="6" Grid.Column="1" x:Name="Simulation" Margin="5,2" Click="SimulationButtonClick">Simulation</Button>
 
       </Grid>
     </GroupBox>
