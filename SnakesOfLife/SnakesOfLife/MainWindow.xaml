@@ -22,61 +22,74 @@
   </Window.Resources>
 
   <DockPanel LastChildFill="True">
-    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="StackPanel">
-      <Button x:Name="StopButton" Margin="5" Click="StopButtonClick">Stop</Button>
-    </StackPanel>
+    <Grid DockPanel.Dock="Left">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+      <GroupBox Grid.Row="0" Name="ParamsPanel" MinWidth="280" Header="View simulation"
+                DataContext="{Binding CurrentParams, RelativeSource={RelativeSource AncestorType=snakesOfLife:MainWindow, Mode=FindAncestor}}">
+        <GroupBox.Resources>
+          <Style TargetType="Label">
+            <Setter Property="Margin" Value="5,2" />
+          </Style>
 
-    <GroupBox Name="ParamsPanel" MinWidth="280" Header="View simulation parameters" 
-              DataContext="{Binding CurrentParams, RelativeSource={RelativeSource AncestorType=snakesOfLife:MainWindow, Mode=FindAncestor}}">
-      <GroupBox.Resources>
-        <Style TargetType="Label">
-          <Setter Property="Margin" Value="5,2" />
-        </Style> 
-        
-        <Style TargetType="TextBox">
-          <Setter Property="Margin" Value="2" />
-        </Style>
-      </GroupBox.Resources>
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition />
+          <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2" />
+          </Style>
+        </GroupBox.Resources>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
 
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-        <Label Content="Needed 'Alive Neighbor' turns to grow:" Grid.Row="0" Grid.Column="0" />
-        <TextBox Text="{Binding NeededAliveNeighborsTurnsToGrow}" Grid.Row="0" Grid.Column="1" />
+          <Label Content="Needed 'Alive Neighbor' turns to grow:" Grid.Row="0" Grid.Column="0" />
+          <TextBox Text="{Binding NeededAliveNeighborsTurnsToGrow}" Grid.Row="0" Grid.Column="1" />
 
-        <Label Content="Cells needed for snake growth:" Grid.Row="1" Grid.Column="0" />
-        <TextBox Text="{Binding SnakeCellsForGrow}" Grid.Row="1" Grid.Column="1" />
+          <Label Content="Cells needed for snake growth:" Grid.Row="1" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeCellsForGrow}" Grid.Row="1" Grid.Column="1" />
 
-        <Label Content="Snake length for snake split:" Grid.Row="2" Grid.Column="0" />
-        <TextBox Text="{Binding SnakeLengthForSplit}" Grid.Row="2" Grid.Column="1" />
+          <Label Content="Snake length for snake split:" Grid.Row="2" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeLengthForSplit}" Grid.Row="2" Grid.Column="1" />
 
-        <Label Content="Snake length to stop moving:" Grid.Row="3" Grid.Column="0" />
-        <TextBox Text="{Binding SnakeLengthToStop}" Grid.Row="3" Grid.Column="1" />
+          <Label Content="Snake length to stop moving:" Grid.Row="3" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeLengthToStop}" Grid.Row="3" Grid.Column="1" />
 
-        <Label Content="Turns not moving to die:" Grid.Row="4" Grid.Column="0" />
-        <TextBox Text="{Binding SnakeTurnToDie}" Grid.Row="4" Grid.Column="1" />
+          <Label Content="Turns not moving to die:" Grid.Row="4" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeTurnToDie}" Grid.Row="4" Grid.Column="1" />
 
-        <Label Content="Turns not eaten to shrink:" Grid.Row="5" Grid.Column="0" />
-        <TextBox Text="{Binding SnakeTurnsToShrink}" Grid.Row="5" Grid.Column="1" />
+          <Label Content="Turns not eaten to shrink:" Grid.Row="5" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeTurnsToShrink}" Grid.Row="5" Grid.Column="1" />
 
-        <Button Grid.Row="6" Grid.Column="0" x:Name="StartButton" Margin="5,2" Click="StartButtonClick">Start view simulation</Button>
-        <Button Grid.Row="6" Grid.Column="1" x:Name="Simulation" Margin="5,2" Click="SimulationButtonClick">Simulation</Button>
+          <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-      </Grid>
-    </GroupBox>
+            <Button Grid.Row="0" Grid.Column="0" x:Name="RandomizeParamertersButton" Margin="5,2"
+                    Click="RandomizeParamsClick">
+              Randomize paramerters
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1" x:Name="StartButton" Margin="5,2" Click="StartButtonClick">Start view simulation</Button>
+            <Button Grid.Row="0" Grid.Column="2" x:Name="StopButton" Margin="5,2" Click="StopButtonClick">Stop</Button>
+          </Grid>
+        </Grid>
+      </GroupBox>
+      <GroupBox Grid.Row="1" Header="Research Simulation" />
+    </Grid>
 
     <Grid x:Name="MainGrid" Background="GhostWhite" Height="600" Width="600" />
   </DockPanel>

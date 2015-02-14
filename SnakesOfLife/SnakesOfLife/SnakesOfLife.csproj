@@ -75,6 +75,8 @@
     <Compile Include="Models\GrassCell.cs" />
     <Compile Include="Extensions\MatrixEx.cs" />
     <Compile Include="Models\Params.cs" />
+    <Compile Include="Models\ParamsChanger.cs" />
+    <Compile Include="Models\PropertyValidator.cs" />
     <Compile Include="Models\RunManager.cs" />
     <Compile Include="Models\RunSet.cs" />
     <Compile Include="Models\Snake.cs" />

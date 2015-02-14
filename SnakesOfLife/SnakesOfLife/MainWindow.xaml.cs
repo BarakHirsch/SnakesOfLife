@@ -16,31 +16,36 @@ namespace SnakesOfLife
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private const int GridSize = 10;
+        private const int GridSize = 50;
 
-        public Params CurrentParams { get; set; }
+        public Params CurrentParams
+        {
+            get { return _currentParams; }
+            set
+            {
+                _currentParams = value;
+                OnPropertyChanged();
+            }
+        }
+
         private RunManager _runManager;
 
         // 100 millisecs.
-        private readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 50);
+        private readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 10);
 
         private readonly DispatcherTimer _timer = new DispatcherTimer();
 
         private readonly List<UIElement> _currentSnakeParts;
         private readonly Image[,] _imageGrid;
+        private readonly ParamsCreator _paramsCreator;
 
-
+        private Params _currentParams;
+        
         public MainWindow()
         {
-            CurrentParams = new Params
-            {
-                NeededAliveNeighborsTurnsToGrow = 40,
-                SnakeCellsForGrow = 5,
-                SnakeLengthForSplit = 8,
-                SnakeLengthToStop = 2,
-                SnakeTurnToDie = 2,
-                SnakeTurnsToShrink = 2
-            };
+            _paramsCreator = new ParamsCreator(new Random());
+
+            CurrentParams = _paramsCreator.Create();
 
             InitializeComponent();
             Loaded += Window_Loaded;
@@ -131,9 +136,11 @@ namespace SnakesOfLife
 
         private void SimulationButtonClick(object sender, RoutedEventArgs e)
         {
-            var simulationRunner = new SimulationRunner(CurrentParams, GridSize, GridSize);
+            var simulationRunner = new SimulationRunner(CurrentParams.Clone(), GridSize, GridSize);
 
             simulationRunner.RunSimulation();
+
+            CurrentParams = simulationRunner.MaximalRun.Params;
         }
 
         private void StartNewRun(Params currParams)
@@ -159,6 +166,11 @@ namespace SnakesOfLife
         private void StopButtonClick(object sender, RoutedEventArgs e)
         {
             _timer.Stop();
+        }
+
+        private void RandomizeParamsClick(object sender, RoutedEventArgs e)
+        {
+            CurrentParams = _paramsCreator.Create();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

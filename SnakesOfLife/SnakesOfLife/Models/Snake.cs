@@ -84,7 +84,7 @@ namespace SnakesOfLife.Models
                 GrassCellsEaten = 0;
             }
 
-            if (TurnsHasNotEaten == Params.SnakeTurnsToShrink)
+            if (Locations.Count > Params.SnakeLengthToStop && TurnsHasNotEaten == Params.SnakeTurnsToShrink)
             {
                 Locations.Dequeue();
                 TurnsHasNotEaten = 0;

@@ -18,7 +18,7 @@ namespace SnakesOfLife.Models
         {
             Params = currParams;
 
-            _random = new Random();
+            _random = new Random(100);
             Snakes = new List<Snake>();
             GrassBoard = new GrassBoard(Params, rowLength, columnLength);
 
