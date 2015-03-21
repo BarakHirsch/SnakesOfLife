@@ -12,35 +12,35 @@ using SnakesOfLife.Models;
 namespace SnakesOfLife
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private const int GridSize = 50;
-
-        public Params CurrentParams
-        {
-            get { return _currentParams; }
-            set
-            {
-                _currentParams = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private RunManager _runManager;
-
-        // 100 millisecs.
-        private readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 10);
-
-        private readonly DispatcherTimer _timer = new DispatcherTimer();
+        private const int GridSize = 10;
+        private readonly BackgroundWorker _backgroudWorker;
 
         private readonly List<UIElement> _currentSnakeParts;
         private readonly Image[,] _imageGrid;
         private readonly ParamsCreator _paramsCreator;
+        private readonly DispatcherTimer _timer = new DispatcherTimer();
+        private readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 10);
+
+        public bool IsRunningSimulation
+        {
+            get { return _isRunningSimulation; }
+            set
+            {
+                _isRunningSimulation = value;
+                OnPropertyChanged();
+            }
+        }
 
         private Params _currentParams;
-        
+        private double _maxRunAverageTurns;
+        private RunManager _runManager;
+        private bool _isRunningSimulation;
+        private RunSet _maxRun;
+
         public MainWindow()
         {
             _paramsCreator = new ParamsCreator(new Random());
@@ -52,8 +52,68 @@ namespace SnakesOfLife
             _currentSnakeParts = new List<UIElement>();
             _imageGrid = new Image[GridSize, GridSize];
 
+            _backgroudWorker = new BackgroundWorker
+            {
+                WorkerSupportsCancellation = true,
+                WorkerReportsProgress = true
+            };
+                
+
+            _backgroudWorker.RunWorkerCompleted += _backgroudWorker_RunWorkerCompleted;
+            _backgroudWorker.ProgressChanged += _backgroudWorker_ProgressChanged;
+            _backgroudWorker.DoWork += _backgroudWorker_DoWork;
 
             InitializeGrid();
+        }
+
+        public RunSet MaxRun
+        {
+            get { return _maxRun; }
+            set
+            {
+                _maxRun = value;
+                OnPropertyChanged();                
+            }
+        }
+
+        public Params CurrentParams
+        {
+            get { return _currentParams; }
+            set
+            {
+                _currentParams = value;
+                OnPropertyChanged();
+            }
+        }
+
+        void _backgroudWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            MaxRun = e.UserState as RunSet;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void _backgroudWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            IsRunningSimulation = true;
+
+            var simulationRunner = new SimulationRunner(GridSize, GridSize);
+
+            simulationRunner.RunSimulation(_backgroudWorker);
+
+            e.Result = simulationRunner.MaximalRun;
+        }
+
+        private void _backgroudWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            IsRunningSimulation = false;
+
+            var runSet = e.Result as RunSet;
+
+            if (runSet != null)
+            {
+                MaxRun = runSet;
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -67,7 +127,7 @@ namespace SnakesOfLife
 
         private void TimerTick(object sender, EventArgs e)
         {
-            var haveMoreSnakes = _runManager.RunTurn();
+            bool haveMoreSnakes = _runManager.RunTurn();
 
             DrawSnakes(_runManager.Snakes);
 
@@ -110,16 +170,16 @@ namespace SnakesOfLife
 
         private void DrawSnakes(IEnumerable<Snake> snakes)
         {
-            foreach (var uiElement in _currentSnakeParts)
+            foreach (UIElement uiElement in _currentSnakeParts)
             {
                 MainGrid.Children.Remove(uiElement);
             }
 
             _currentSnakeParts.Clear();
 
-            foreach (var snake in snakes)
+            foreach (Snake snake in snakes)
             {
-                foreach (var grassCell in snake.Locations)
+                foreach (GrassCell grassCell in snake.Locations)
                 {
                     var snakePart = new Ellipse();
 
@@ -134,18 +194,9 @@ namespace SnakesOfLife
             }
         }
 
-        private void SimulationButtonClick(object sender, RoutedEventArgs e)
-        {
-            var simulationRunner = new SimulationRunner(CurrentParams.Clone(), GridSize, GridSize);
-
-            simulationRunner.RunSimulation();
-
-            CurrentParams = simulationRunner.MaximalRun.Params;
-        }
-
         private void StartNewRun(Params currParams)
         {
-            _runManager = new RunManager(currParams, GridSize, GridSize);
+            _runManager = new RunManager(currParams, GridSize, GridSize, new Random());
 
             for (int row = 0; row < GridSize; row++)
             {
@@ -168,17 +219,25 @@ namespace SnakesOfLife
             _timer.Stop();
         }
 
+        private void SimulationButtonClick(object sender, RoutedEventArgs e)
+        {
+            _backgroudWorker.RunWorkerAsync();
+        }
+
+        private void StopResearchClick(object sender, RoutedEventArgs e)
+        {
+            _backgroudWorker.CancelAsync();
+        }
+
         private void RandomizeParamsClick(object sender, RoutedEventArgs e)
         {
             CurrentParams = _paramsCreator.Create();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }

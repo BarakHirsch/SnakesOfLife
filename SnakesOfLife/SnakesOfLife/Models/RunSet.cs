@@ -1,74 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+
 namespace SnakesOfLife.Models
 {
-    public class SimulationRunner
+    public class RunSet
     {
-        public RunManager MaximalRun { get; set; }
-
         private readonly int _rowLength;
         private readonly int _columnLength;
-        private readonly ParamsChanger _paramsChanger;
 
-        public SimulationRunner(Params currParams, int rowLength, int columnLength)
+        private readonly Random _random;
+
+        public RunSet(Params currParams, int rowLength, int columnLength)
         {
+            Params = currParams;
             _rowLength = rowLength;
             _columnLength = columnLength;
 
-            _paramsChanger = new ParamsChanger(currParams);
+            _random = new Random();
         }
 
-        public void RunSimulation()
+        public Params Params { get; set; }
+        public double AverageTurns { get; set; }
+        
+        public void Run(BackgroundWorker cancellationToken)
         {
-            do
+            var runManagers = new List<RunManager>();
+
+            for (var i = 0; i < 5; i++)
             {
-                bool hasImprovedOnLastRun;
-                var hasImprovedByProperty = false;
-
-                do
-                {
-                    hasImprovedOnLastRun = RunSetForParams(_paramsChanger.GetCurrParams());
-
-                    if (hasImprovedOnLastRun)
-                    {
-                        hasImprovedByProperty = true;
-                    }
-                } while (hasImprovedOnLastRun && _paramsChanger.IncreseCurrentPropertyValue());
-
-                do
-                {
-                    hasImprovedOnLastRun = RunSetForParams(_paramsChanger.GetCurrParams());
-
-                    if (hasImprovedOnLastRun)
-                    {
-                        hasImprovedByProperty = true;
-                    }
-                } while (hasImprovedOnLastRun && _paramsChanger.DecreseCurrentPropertyValue());
-
-                if (hasImprovedByProperty)
-                {
-                    _paramsChanger.ResetCurrentProperty();
-                }
-            } while (_paramsChanger.MoveToNextProperty() && _paramsChanger.IncreseCurrentPropertyValue());
-        }
-
-        public bool RunSetForParams(Params currParams)
-        {
-            var runSet = new RunManager(currParams, _rowLength, _columnLength);
-
-            int runToEnd = runSet.RunToEnd();
-
-            if (MaximalRun == null)
-            {
-                MaximalRun = runSet;
-                return true;
+                runManagers.Add(new RunManager(Params, _rowLength, _columnLength, new Random(_random.Next())));
             }
 
-            if (runToEnd > MaximalRun.TurnsCount)
+            foreach (var runManager in runManagers)
             {
-                MaximalRun = runSet;
-                return true;
+                runManager.RunToEnd(cancellationToken);
             }
 
-            return false;
+            AverageTurns = runManagers.Average(x => x.TurnsCount);
         }
     }
 }

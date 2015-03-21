@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace SnakesOfLife.Models
@@ -14,11 +15,11 @@ namespace SnakesOfLife.Models
 
         public Params Params { get; private set; }
 
-        public RunManager(Params currParams, int rowLength, int columnLength)
+        public RunManager(Params currParams, int rowLength, int columnLength, Random random)
         {
             Params = currParams;
+            _random = random;
 
-            _random = new Random(100);
             Snakes = new List<Snake>();
             GrassBoard = new GrassBoard(Params, rowLength, columnLength);
 
@@ -36,16 +37,14 @@ namespace SnakesOfLife.Models
             Snakes.Add(snake);
         }
 
-        public int RunToEnd()
+        public void RunToEnd(BackgroundWorker cancellationToken)
         {
             bool notEnded;
 
             do
             {
                 notEnded = RunTurn();
-            } while (notEnded);
-
-            return TurnsCount;
+            } while (notEnded && !cancellationToken.CancellationPending);
         }
 
         public bool RunTurn()

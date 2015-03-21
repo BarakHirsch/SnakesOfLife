@@ -75,7 +75,7 @@ namespace SnakesOfLife.Models
 
             CheckGrassEaten(cell.EnteredBySnake());
 
-            if (GrassCellsEaten != Params.SnakeCellsForGrow)
+            if (GrassCellsEaten <= Params.SnakeCellsForGrow)
             {
                 Locations.Dequeue();
             }
