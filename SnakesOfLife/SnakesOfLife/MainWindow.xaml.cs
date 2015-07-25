@@ -6,10 +6,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using SnakesOfLife.Annotations;
-using SnakesOfLife.Models;
+using Logic.Models;
+using UI.Properties;
 
-namespace SnakesOfLife
+namespace UI
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
@@ -36,7 +36,6 @@ namespace SnakesOfLife
         }
 
         private Params _currentParams;
-        private double _maxRunAverageTurns;
         private RunManager _runManager;
         private bool _isRunningSimulation;
         private RunSet _maxRun;
@@ -127,11 +126,11 @@ namespace SnakesOfLife
 
         private void TimerTick(object sender, EventArgs e)
         {
-            bool haveMoreSnakes = _runManager.RunTurn();
+            _runManager.RunTurn();
 
             DrawSnakes(_runManager.Snakes);
 
-            if (!haveMoreSnakes)
+            if (_runManager.HasEnded)
             {
                 MessageBox.Show("There are no more snakes alive, Game over");
 

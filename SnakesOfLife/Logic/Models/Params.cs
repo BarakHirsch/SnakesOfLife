@@ -1,4 +1,4 @@
-﻿namespace SnakesOfLife.Models
+﻿namespace Logic.Models
 {
     public class Params
     {

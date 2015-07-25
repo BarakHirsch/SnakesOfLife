@@ -1,8 +1,8 @@
-﻿<Window x:Class="SnakesOfLife.MainWindow"
+﻿<Window x:Class="UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:snakesOfLife="clr-namespace:SnakesOfLife"
-        xmlns:converters="clr-namespace:SnakesOfLife.Converters"
+        xmlns:converters="clr-namespace:UI.Converters"
+        xmlns:ui="clr-namespace:UI"
         Title="MainWindow" SizeToContent="WidthAndHeight">
   <Window.Resources>
     <Style x:Key="GrassCellStyle" TargetType="{x:Type Image}">
@@ -30,7 +30,7 @@
         <RowDefinition />
       </Grid.RowDefinitions>
       <GroupBox Grid.Row="0" Name="ParamsPanel" MinWidth="280" Header="View simulation"
-                DataContext="{Binding CurrentParams, RelativeSource={RelativeSource AncestorType=snakesOfLife:MainWindow, Mode=FindAncestor}}">
+                DataContext="{Binding CurrentParams, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}}">
         <GroupBox.Resources>
           <Style TargetType="Label">
             <Setter Property="Margin" Value="5,2" />
@@ -101,17 +101,17 @@
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
           <Button Grid.Row="0" Grid.Column="0" x:Name="SimulationButton" Margin="5,2" Click="SimulationButtonClick"
-                  IsEnabled="{Binding IsRunningSimulation, RelativeSource={RelativeSource AncestorType=snakesOfLife:MainWindow, Mode=FindAncestor}, Converter={StaticResource InverseBooleanConverter}}">
+                  IsEnabled="{Binding IsRunningSimulation, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}, Converter={StaticResource InverseBooleanConverter}}">
             Start research simulation
           </Button>
           <Button Grid.Row="0" Grid.Column="1" x:Name="StopResearch" Margin="5,2" Click="StopResearchClick"
-                  IsEnabled="{Binding IsRunningSimulation, RelativeSource={RelativeSource AncestorType=snakesOfLife:MainWindow, Mode=FindAncestor}}">
+                  IsEnabled="{Binding IsRunningSimulation, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}}">
             Stop research
           </Button>
 
 
           <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsEnabled="False"
-                DataContext="{Binding MaxRun, RelativeSource={RelativeSource AncestorType=snakesOfLife:MainWindow, Mode=FindAncestor}}">
+                DataContext="{Binding MaxRun, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}}">
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />

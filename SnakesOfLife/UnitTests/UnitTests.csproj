@@ -51,9 +51,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SnakesOfLife\SnakesOfLife.csproj">
+    <ProjectReference Include="..\Logic\Logic.csproj">
+      <Project>{D7982B84-AF64-438C-8E04-D453637E7EF5}</Project>
+      <Name>Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SnakesOfLife\UI.csproj">
       <Project>{D1F9DECB-8D87-4CEF-93DA-B9B2D4F866EA}</Project>
-      <Name>SnakesOfLife</Name>
+      <Name>UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace SnakesOfLife.Models
+namespace Logic.Models
 {
     public class RunSet
     {

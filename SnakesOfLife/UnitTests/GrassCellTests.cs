@@ -1,5 +1,5 @@
+using Logic.Models;
 using NUnit.Framework;
-using SnakesOfLife.Models;
 
 namespace UnitTests
 {

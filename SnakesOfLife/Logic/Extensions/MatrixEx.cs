@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SnakesOfLife.Extensions
+namespace Logic.Extensions
 {
     public static class MatrixEx
     {

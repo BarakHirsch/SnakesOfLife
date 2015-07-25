@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakesOfLife", "SnakesOfLife\SnakesOfLife.csproj", "{D1F9DECB-8D87-4CEF-93DA-B9B2D4F866EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "SnakesOfLife\UI.csproj", "{D1F9DECB-8D87-4CEF-93DA-B9B2D4F866EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{E4BB334E-10C0-4C27-80E7-597485975250}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{D7982B84-AF64-438C-8E04-D453637E7EF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{559938DF-4E65-41B6-BE25-63CB58BC67C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +23,14 @@ Global
 		{E4BB334E-10C0-4C27-80E7-597485975250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4BB334E-10C0-4C27-80E7-597485975250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4BB334E-10C0-4C27-80E7-597485975250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7982B84-AF64-438C-8E04-D453637E7EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7982B84-AF64-438C-8E04-D453637E7EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7982B84-AF64-438C-8E04-D453637E7EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7982B84-AF64-438C-8E04-D453637E7EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{559938DF-4E65-41B6-BE25-63CB58BC67C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{559938DF-4E65-41B6-BE25-63CB58BC67C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{559938DF-4E65-41B6-BE25-63CB58BC67C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{559938DF-4E65-41B6-BE25-63CB58BC67C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

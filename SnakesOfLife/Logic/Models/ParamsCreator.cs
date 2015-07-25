@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SnakesOfLife.Models
+namespace Logic.Models
 {
     public class ParamsCreator
     {

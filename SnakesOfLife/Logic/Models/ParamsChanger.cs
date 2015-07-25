@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace SnakesOfLife.Models
+namespace Logic.Models
 {
     public class ParamsChanger
     {

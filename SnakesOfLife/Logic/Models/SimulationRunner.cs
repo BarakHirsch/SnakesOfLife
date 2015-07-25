@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace SnakesOfLife.Models
+namespace Logic.Models
 {
     public class SimulationRunner
     {
