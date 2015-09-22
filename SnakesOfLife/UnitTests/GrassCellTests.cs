@@ -1,26 +1,30 @@
+using Logic.Models;
 using NUnit.Framework;
-using SnakesOfLife.Models;
 
 namespace UnitTests
 {
     [TestFixture]
     public class GrassCellTests
     {
+        public Params CurrentParams { get; set; }
+
         [SetUp]
         public void SetUp()
         {
-            Params.Instance.NeededAliveNeighborsTurnsToGrow = 3;
-            Params.Instance.SnakeCellsForGrow = 1;
-            Params.Instance.SnakeLengthForSplit = 8;
-            Params.Instance.SnakeLengthToStay = 2;
-            Params.Instance.SnakeTurnToDie = 2;
-
+            CurrentParams = new Params
+            {
+                NeededAliveNeighborsTurnsToGrow = 3,
+                SnakeCellsForGrow = 1,
+                SnakeLengthForSplit = 8,
+                SnakeLengthToStop = 2,
+                SnakeTurnToDie = 2
+            };
         }
 
         [Test]
         public void NewGrassCell()
         {
-            var grassCell = new GrassCell();
+            var grassCell = new GrassCell(CurrentParams);
 
             Assert.That(grassCell.IsAlive);
             Assert.AreEqual(0, grassCell.NeededAliveNeighborsTurnsToGrow);
@@ -29,14 +33,14 @@ namespace UnitTests
         [Test]
         public void UpdateAboveZero()
         {
-            var grassCell = new GrassCell();
+            var grassCell = new GrassCell(CurrentParams);
 
             grassCell.EnteredBySnake();
 
             Assert.That(!grassCell.IsAlive);
-            Assert.AreEqual(Params.Instance.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
+            Assert.AreEqual(CurrentParams.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
 
-            grassCell.UpdateGrowth(Params.Instance.NeededAliveNeighborsTurnsToGrow - 1);
+            grassCell.UpdateGrowth(CurrentParams.NeededAliveNeighborsTurnsToGrow - 1);
 
             Assert.That(!grassCell.IsAlive);
             Assert.AreEqual(1, grassCell.NeededAliveNeighborsTurnsToGrow);
@@ -45,14 +49,14 @@ namespace UnitTests
         [Test]
         public void UpdateToZero()
         {
-            var grassCell = new GrassCell();
+            var grassCell = new GrassCell(CurrentParams);
 
             grassCell.EnteredBySnake();
 
             Assert.That(!grassCell.IsAlive);
-            Assert.AreEqual(Params.Instance.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
+            Assert.AreEqual(CurrentParams.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
 
-            grassCell.UpdateGrowth(Params.Instance.NeededAliveNeighborsTurnsToGrow);
+            grassCell.UpdateGrowth(CurrentParams.NeededAliveNeighborsTurnsToGrow);
 
             Assert.That(grassCell.IsAlive);
             Assert.AreEqual(0, grassCell.NeededAliveNeighborsTurnsToGrow);
@@ -61,14 +65,14 @@ namespace UnitTests
         [Test]
         public void UpdateBelowZero()
         {
-            var grassCell = new GrassCell();
+            var grassCell = new GrassCell(CurrentParams);
 
             grassCell.EnteredBySnake();
 
             Assert.That(!grassCell.IsAlive);
-            Assert.AreEqual(Params.Instance.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
+            Assert.AreEqual(CurrentParams.NeededAliveNeighborsTurnsToGrow, grassCell.NeededAliveNeighborsTurnsToGrow);
 
-            grassCell.UpdateGrowth(Params.Instance.NeededAliveNeighborsTurnsToGrow + 1);
+            grassCell.UpdateGrowth(CurrentParams.NeededAliveNeighborsTurnsToGrow + 1);
 
             Assert.That(grassCell.IsAlive);
             Assert.AreEqual(0, grassCell.NeededAliveNeighborsTurnsToGrow);

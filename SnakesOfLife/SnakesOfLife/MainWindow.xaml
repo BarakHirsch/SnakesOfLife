@@ -1,35 +1,161 @@
-﻿<Window x:Class="SnakesOfLife.MainWindow"
+﻿<Window x:Class="UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Window.Resources>
-        <Style x:Key="GrassCellStyle" TargetType="{x:Type Ellipse}">
-            <Setter Property="Opacity" Value="{Binding Path=IsAlive}" />
-            <Setter Property="Fill" >
-                <Setter.Value>
-                    <RadialGradientBrush GradientOrigin="0.496,1.052">
-                        <RadialGradientBrush.RelativeTransform>
-                            <TransformGroup>
-                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
-                                <TranslateTransform X="0.02" Y="0.3"/>
-                            </TransformGroup>
-                        </RadialGradientBrush.RelativeTransform>
-                        <GradientStop Offset="1" Color="#FF1CC118"/>
-                        <GradientStop Offset="0.4" Color="#FF136C11"/>
-                    </RadialGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
+        xmlns:converters="clr-namespace:UI.Converters"
+        xmlns:ui="clr-namespace:UI"
+        Title="MainWindow" SizeToContent="WidthAndHeight">
+  <Window.Resources>
+    <Style x:Key="GrassCellStyle" TargetType="{x:Type Image}">
+      <Setter Property="Source" Value="/Resources/AliveGrass.png" />
+      <Setter Property="Stretch" Value="Fill" />
+      <Setter Property="Margin" Value="-1" />
+      <Style.Triggers>
+        <DataTrigger Value="False" Binding="{Binding IsAlive}">
+          <Setter Property="Source" Value="/Resources/NoGrass.png" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style x:Key="SnakePartStyle" TargetType="Ellipse">
+      <Setter Property="Fill" Value="Blue" />
+      <Setter Property="Stroke" Value="Black" />
+      <Setter Property="StrokeThickness" Value="1" />
+    </Style>
+    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+  </Window.Resources>
 
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="StackPanel">
-            <Button x:Name="StartButton" Margin="5" Click="StartButtonClick">Start</Button>
-            <Button x:Name="StopButton" Margin="5" Click="StopButtonClick">Stop</Button>
-        </StackPanel>
+  <DockPanel LastChildFill="True">
+    <Grid DockPanel.Dock="Left">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+      <GroupBox Grid.Row="0" Name="ParamsPanel" MinWidth="280" Header="View simulation"
+                DataContext="{Binding CurrentParams, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}}">
+        <GroupBox.Resources>
+          <Style TargetType="Label">
+            <Setter Property="Margin" Value="5,2" />
+          </Style>
 
-        <Grid x:Name="MainGrid" Background="GhostWhite" />
-    </DockPanel>
+          <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2" />
+          </Style>
+        </GroupBox.Resources>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+
+          <Label Content="Needed 'Alive Neighbor' turns to grow:" Grid.Row="0" Grid.Column="0" />
+          <TextBox Text="{Binding NeededAliveNeighborsTurnsToGrow}" Grid.Row="0" Grid.Column="1" />
+
+          <Label Content="Cells needed for snake growth:" Grid.Row="1" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeCellsForGrow}" Grid.Row="1" Grid.Column="1" />
+
+          <Label Content="Snake length for snake split:" Grid.Row="2" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeLengthForSplit}" Grid.Row="2" Grid.Column="1" />
+
+          <Label Content="Snake length to stop moving:" Grid.Row="3" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeLengthToStop}" Grid.Row="3" Grid.Column="1" />
+
+          <Label Content="Turns not moving to die:" Grid.Row="4" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeTurnToDie}" Grid.Row="4" Grid.Column="1" />
+
+          <Label Content="Turns not eaten to shrink:" Grid.Row="5" Grid.Column="0" />
+          <TextBox Text="{Binding SnakeTurnsToShrink}" Grid.Row="5" Grid.Column="1" />
+
+          <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" x:Name="RandomizeParamertersButton" Margin="5,2"
+                    Click="RandomizeParamsClick">
+              Randomize paramerters
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1" x:Name="StartButton" Margin="5,2" Click="StartButtonClick">Start view simulation</Button>
+            <Button Grid.Row="0" Grid.Column="2" x:Name="StopButton" Margin="5,2" Click="StopButtonClick">Stop</Button>
+          </Grid>
+        </Grid>
+      </GroupBox>
+      <GroupBox Grid.Row="1" Header="Research Simulation">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Button Grid.Row="0" Grid.Column="0" x:Name="SimulationButton" Margin="5,2" Click="SimulationButtonClick"
+                  IsEnabled="{Binding IsRunningSimulation, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}, Converter={StaticResource InverseBooleanConverter}}">
+            Start research simulation
+          </Button>
+          <Button Grid.Row="0" Grid.Column="1" x:Name="StopResearch" Margin="5,2" Click="StopResearchClick"
+                  IsEnabled="{Binding IsRunningSimulation, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}}">
+            Stop research
+          </Button>
+
+
+          <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsEnabled="False"
+                DataContext="{Binding MaxRun, RelativeSource={RelativeSource AncestorType=ui:MainWindow, Mode=FindAncestor}}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+              <RowDefinition />
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Maximal Average Turns for params:" Grid.Row="0" Grid.Column="0" />
+            <TextBox Text="{Binding AverageTurns}" Grid.Row="0" Grid.Column="1" />
+
+            <Label Content="Needed 'Alive Neighbor' turns to grow:" Grid.Row="1" Grid.Column="0" />
+            <TextBox Text="{Binding Params.NeededAliveNeighborsTurnsToGrow}" Grid.Row="1" Grid.Column="1" />
+
+            <Label Content="Cells needed for snake growth:" Grid.Row="2" Grid.Column="0" />
+            <TextBox Text="{Binding Params.SnakeCellsForGrow}" Grid.Row="2" Grid.Column="1" />
+
+            <Label Content="Snake length for snake split:" Grid.Row="3" Grid.Column="0" />
+            <TextBox Text="{Binding Params.SnakeLengthForSplit}" Grid.Row="3" Grid.Column="1" />
+
+            <Label Content="Snake length to stop moving:" Grid.Row="4" Grid.Column="0" />
+            <TextBox Text="{Binding Params.SnakeLengthToStop}" Grid.Row="4" Grid.Column="1" />
+
+            <Label Content="Turns not moving to die:" Grid.Row="5" Grid.Column="0" />
+            <TextBox Text="{Binding Params.SnakeTurnToDie}" Grid.Row="5" Grid.Column="1" />
+
+            <Label Content="Turns not eaten to shrink:" Grid.Row="6" Grid.Column="0" />
+            <TextBox Text="{Binding Params.SnakeTurnsToShrink}" Grid.Row="6" Grid.Column="1" />
+          </Grid>
+        </Grid>
+      </GroupBox>
+    </Grid>
+
+    <Grid x:Name="MainGrid" Background="GhostWhite" Height="600" Width="600" />
+  </DockPanel>
 
 
 </Window>

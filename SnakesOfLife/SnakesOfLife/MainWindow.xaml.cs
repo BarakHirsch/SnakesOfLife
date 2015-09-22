@@ -1,110 +1,243 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using SnakesOfLife.Models;
+using Logic.Models;
+using UI.Properties;
 
-namespace SnakesOfLife
+namespace UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : INotifyPropertyChanged
     {
-        const int MaxGridSize = 80;
-        
-        // 100 millisecs.
-        readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 100);
-        
-        // The cells that make up the grid.
-        private GrassBoard _cells;
-        
-        readonly DispatcherTimer _timer = new DispatcherTimer();
+        private const int GridSize = 10;
+        private readonly BackgroundWorker _backgroudWorker;
+
+        private readonly List<UIElement> _currentSnakeParts;
+        private readonly Image[,] _imageGrid;
+        private readonly ParamsCreator _paramsCreator;
+        private readonly DispatcherTimer _timer = new DispatcherTimer();
+        private readonly TimeSpan _timerInterval = new TimeSpan(0, 0, 0, 0, 10);
+
+        public bool IsRunningSimulation
+        {
+            get { return _isRunningSimulation; }
+            set
+            {
+                _isRunningSimulation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Params _currentParams;
+        private RunManager _runManager;
+        private bool _isRunningSimulation;
+        private RunSet _maxRun;
 
         public MainWindow()
         {
+            _paramsCreator = new ParamsCreator(new Random());
+
+            CurrentParams = _paramsCreator.Create();
+
             InitializeComponent();
-            this.Loaded += Window_Loaded;
+            Loaded += Window_Loaded;
+            _currentSnakeParts = new List<UIElement>();
+            _imageGrid = new Image[GridSize, GridSize];
+
+            _backgroudWorker = new BackgroundWorker
+            {
+                WorkerSupportsCancellation = true,
+                WorkerReportsProgress = true
+            };
+                
+
+            _backgroudWorker.RunWorkerCompleted += _backgroudWorker_RunWorkerCompleted;
+            _backgroudWorker.ProgressChanged += _backgroudWorker_ProgressChanged;
+            _backgroudWorker.DoWork += _backgroudWorker_DoWork;
+
+            InitializeGrid();
+        }
+
+        public RunSet MaxRun
+        {
+            get { return _maxRun; }
+            set
+            {
+                _maxRun = value;
+                OnPropertyChanged();                
+            }
+        }
+
+        public Params CurrentParams
+        {
+            get { return _currentParams; }
+            set
+            {
+                _currentParams = value;
+                OnPropertyChanged();
+            }
+        }
+
+        void _backgroudWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            MaxRun = e.UserState as RunSet;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void _backgroudWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            IsRunningSimulation = true;
+
+            var simulationRunner = new SimulationRunner(GridSize, GridSize);
+
+            simulationRunner.RunSimulation(_backgroudWorker);
+
+            e.Result = simulationRunner.MaximalRun;
+        }
+
+        private void _backgroudWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            IsRunningSimulation = false;
+
+            var runSet = e.Result as RunSet;
+
+            if (runSet != null)
+            {
+                MaxRun = runSet;
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
-            //Sets up the display grid.
-            InitializeGrid();
-
             //Determines what method should be called on every timer tick.
             _timer.Tick += TimerTick;
 
             //Sets the timer interval.
             _timer.Interval = _timerInterval;
-
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
-            // Update the grid and cells.
-            _cells.UpdateGrass();
+            _runManager.RunTurn();
+
+            DrawSnakes(_runManager.Snakes);
+
+            if (_runManager.HasEnded)
+            {
+                MessageBox.Show("There are no more snakes alive, Game over");
+
+                _timer.Stop();
+            }
         }
 
         private void InitializeGrid()
         {
-            Params.Instance.NeededAliveNeighborsTurnsToGrow = 3;
-            Params.Instance.SnakeCellsForGrow = 1;
-            Params.Instance.SnakeLengthForSplit = 8;
-            Params.Instance.SnakeLengthToStay = 2;
-            Params.Instance.SnakeTurnToDie = 2;
-
-            _cells = new GrassBoard(MaxGridSize, MaxGridSize);
-            
             //Generate the grid
-            for (int i = 0; i < MaxGridSize; i++)
+            for (int i = 0; i < GridSize; i++)
             {
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 MainGrid.RowDefinitions.Add(new RowDefinition());
             }
 
-            for (int row = 0; row < MaxGridSize; row++)
+            for (int row = 0; row < GridSize; row++)
             {
-                for (int column = 0; column < MaxGridSize; column++)
+                for (int column = 0; column < GridSize; column++)
                 {
                     //Create a new Ellipse shape.
-                    Ellipse ellipse = new Ellipse();
+                    var image = new Image();
 
                     //Set the value of the Row/Column (e.g. Cell) with the Ellipse UI element. (e.g. (0,0), (35,35), (40,40) 
-                    Grid.SetColumn(ellipse, column);
-                    Grid.SetRow(ellipse, row);
+                    Grid.SetColumn(image, column);
+                    Grid.SetRow(image, row);
 
-                    ellipse.DataContext = _cells.GrassCells[row][column];
+                    image.Style = Resources["GrassCellStyle"] as Style;
 
-                    // Add the ellipse to the grid cell.
-                    MainGrid.Children.Add(ellipse);
+                    _imageGrid[row, column] = image;
 
-                    // Set the style of the ellipse using the style information defined in the XAML file.
-                    ellipse.Style = Resources["GrassCellStyle"] as Style;
+                    MainGrid.Children.Add(image);
+                }
+            }
+        }
+
+        private void DrawSnakes(IEnumerable<Snake> snakes)
+        {
+            foreach (UIElement uiElement in _currentSnakeParts)
+            {
+                MainGrid.Children.Remove(uiElement);
+            }
+
+            _currentSnakeParts.Clear();
+
+            foreach (Snake snake in snakes)
+            {
+                foreach (GrassCell grassCell in snake.Locations)
+                {
+                    var snakePart = new Ellipse();
+
+                    Grid.SetRow(snakePart, grassCell.RowIndex);
+                    Grid.SetColumn(snakePart, grassCell.ColumnIndex);
+
+                    snakePart.Style = Resources["SnakePartStyle"] as Style;
+
+                    MainGrid.Children.Add(snakePart);
+                    _currentSnakeParts.Add(snakePart);
+                }
+            }
+        }
+
+        private void StartNewRun(Params currParams)
+        {
+            _runManager = new RunManager(currParams, GridSize, GridSize, new Random());
+
+            for (int row = 0; row < GridSize; row++)
+            {
+                for (int column = 0; column < GridSize; column++)
+                {
+                    _imageGrid[row, column].DataContext = _runManager.GrassBoard.GrassCells[row][column];
                 }
             }
         }
 
         private void StartButtonClick(object sender, RoutedEventArgs e)
         {
+            StartNewRun(CurrentParams);
+
             _timer.Start();
         }
 
         private void StopButtonClick(object sender, RoutedEventArgs e)
         {
             _timer.Stop();
+        }
+
+        private void SimulationButtonClick(object sender, RoutedEventArgs e)
+        {
+            _backgroudWorker.RunWorkerAsync();
+        }
+
+        private void StopResearchClick(object sender, RoutedEventArgs e)
+        {
+            _backgroudWorker.CancelAsync();
+        }
+
+        private void RandomizeParamsClick(object sender, RoutedEventArgs e)
+        {
+            CurrentParams = _paramsCreator.Create();
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

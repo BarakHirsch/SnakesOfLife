@@ -1,0 +1,91 @@
+/**
+ * Game of Life stylesheet
+ * Author: Stéphane LEROY
+ * Twitter : @StphaneL
+ * Date: 02/03/13
+ * Time: 15:29
+ */
+
+.center{
+    text-align: center;
+}
+.world table{
+    padding: 0;
+    margin-top:5px;
+    margin-left:auto;
+    margin-right:auto;
+    border-spacing: 0;
+    border: 1px solid #2f4f4f;
+}
+
+.world td {
+    padding: 0;
+    border: 2px solid #2f4f4f;
+}
+
+.cell {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: block;
+}
+
+.cell.Live {
+    background-image:url('../img/alive.jpg');
+    background-repeat:repeat;
+} 
+
+
+.cell.Dead {
+    background-image:url('../img/dead.jpg');
+    background-repeat:repeat;
+}
+
+.cell.Snake {
+    background-image:url('../img/snake.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.table>tbody>tr>td { padding: 0;}
+
+.nav-expanded {
+    right: 300px;
+}
+
+nav {
+    padding: 10px;
+    background-color: whitesmoke;
+    border-left: 1px solid #e3e3e3;
+    display: block;
+    height: 100%;
+    overflow: auto;
+    position: fixed;
+    right: -300px;
+    font-size: 15px;
+    top: 0;
+    width: 300px;
+    z-index: 2000;
+    transition: right 0.3s ease-in-out 0s;
+    -webkit-transition: right 0.3s ease-in-out 0s;
+    -moz-transition: right 0.3s ease-in-out 0s;
+    -o-transition: right 0.3s ease-in-out 0s;
+}
+
+.nav-expanded nav {
+    right: 0;
+}
+
+body.nav-expanded {
+    margin-left: 0;
+    transition: right 0.4s ease-in-out 0s;
+    -webkit-transition: right 0.4s ease-in-out 0s;
+    -moz-transition: right 0.4s ease-in-out 0s;
+    -o-transition: right 0.4s ease-in-out 0s;
+}
+
+#nav-close {
+    font-weight: 300;
+    font-size: 14px;
+    margin-top: 6px;
+    margin-right: 6px;
+}

@@ -1,25 +1,30 @@
-﻿using NUnit.Framework;
-using SnakesOfLife.Models;
+﻿using Logic.Models;
+using NUnit.Framework;
 
 namespace UnitTests
 {
     [TestFixture]
     public class GrassBoardTests
     {
+        public Params CurrentParams { get; set; }
+
         [SetUp]
         public void SetUp()
         {
-            Params.Instance.NeededAliveNeighborsTurnsToGrow = 3;
-            Params.Instance.SnakeCellsForGrow = 1;
-            Params.Instance.SnakeLengthForSplit = 8;
-            Params.Instance.SnakeLengthToStay = 2;
-            Params.Instance.SnakeTurnToDie = 2;
+            CurrentParams = new Params
+            {
+                NeededAliveNeighborsTurnsToGrow = 3,
+                SnakeCellsForGrow = 1,
+                SnakeLengthForSplit = 8,
+                SnakeLengthToStop = 2,
+                SnakeTurnToDie = 2
+            };
         }
 
         [Test]
         public void EnterCell()
         {
-            var grassBoard = new GrassBoard(5, 5);
+            var grassBoard = new GrassBoard(CurrentParams, 5, 5);
 
             grassBoard.CellEntered(0, 0);
 
@@ -29,7 +34,7 @@ namespace UnitTests
         [Test]
         public void GrowInOneTurn()
         {
-            var grassBoard = new GrassBoard(5, 5);
+            var grassBoard = new GrassBoard(CurrentParams, 5, 5);
 
             grassBoard.CellEntered(0, 0);
 
@@ -41,7 +46,7 @@ namespace UnitTests
         [Test]
         public void GrowInTwoTurns()
         {
-            var grassBoard = new GrassBoard(5, 5);
+            var grassBoard = new GrassBoard(CurrentParams, 5, 5);
 
             grassBoard.CellEntered(0, 0);
             grassBoard.CellEntered(0, 1);
@@ -60,7 +65,7 @@ namespace UnitTests
         [Test]
         public void NoGrass()
         {
-            var grassBoard = new GrassBoard(2, 2);
+            var grassBoard = new GrassBoard(CurrentParams, 2, 2);
 
             grassBoard.CellEntered(0, 0);
             grassBoard.CellEntered(0, 1);
