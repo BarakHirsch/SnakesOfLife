@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 
 namespace Logic.Models
 {
@@ -24,7 +25,7 @@ namespace Logic.Models
         public Params Params { get; set; }
         public double AverageTurns { get; set; }
         
-        public void Run(BackgroundWorker cancellationToken)
+        public void Run(CancellationToken cancellationToken)
         {
             var runManagers = new List<RunManager>();
 

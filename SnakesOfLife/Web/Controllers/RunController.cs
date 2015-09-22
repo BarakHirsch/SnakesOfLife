@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Web;
-using System.Web.Caching;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Logic.Models;
@@ -14,8 +10,6 @@ namespace Web.Controllers
     [EnableCors("*", "*", "*")]
     public class RunController : ApiController
     {
-        private const int GridSize = 20;
-
         // GET api/<controller>/5
         public IHttpActionResult Get(string id)
         {
@@ -39,7 +33,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            var runManager = new RunManager(currParams, GridSize, GridSize, new Random());
+            var runManager = new RunManager(currParams, GameComstants.GridSize, GameComstants.GridSize, new Random());
 
             var gameId = Guid.NewGuid().ToString();
 

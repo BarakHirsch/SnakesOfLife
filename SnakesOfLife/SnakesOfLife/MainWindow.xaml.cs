@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -18,6 +20,7 @@ namespace UI
     {
         private const int GridSize = 10;
         private readonly BackgroundWorker _backgroudWorker;
+        private CancellationTokenSource _cancellationTokenSource;
 
         private readonly List<UIElement> _currentSnakeParts;
         private readonly Image[,] _imageGrid;
@@ -51,13 +54,14 @@ namespace UI
             _currentSnakeParts = new List<UIElement>();
             _imageGrid = new Image[GridSize, GridSize];
 
+            _cancellationTokenSource = new CancellationTokenSource();
+
             _backgroudWorker = new BackgroundWorker
             {
                 WorkerSupportsCancellation = true,
                 WorkerReportsProgress = true
             };
                 
-
             _backgroudWorker.RunWorkerCompleted += _backgroudWorker_RunWorkerCompleted;
             _backgroudWorker.ProgressChanged += _backgroudWorker_ProgressChanged;
             _backgroudWorker.DoWork += _backgroudWorker_DoWork;
@@ -94,13 +98,26 @@ namespace UI
 
         private void _backgroudWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            var cancellationToken = _cancellationTokenSource.Token;
+
             IsRunningSimulation = true;
+            
+            var simulationRunner = new SimulationRunner(GridSize, GridSize, cancellationToken);
 
-            var simulationRunner = new SimulationRunner(GridSize, GridSize);
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                simulationRunner.LocateMaximalPoint();
 
-            simulationRunner.RunSimulation(_backgroudWorker);
+                _backgroudWorker.ReportProgress(0, GetMaxRun(simulationRunner));
+            }
 
-            e.Result = simulationRunner.MaximalRun;
+            e.Result = GetMaxRun(simulationRunner);
+        }
+
+        private static RunSet GetMaxRun(SimulationRunner simulationRunner)
+        {
+            var runSets = simulationRunner.RanOptimizations.Select(x => x.MaximalRun).OrderBy(x => x.AverageTurns);
+            return runSets.FirstOrDefault();
         }
 
         private void _backgroudWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -225,7 +242,9 @@ namespace UI
 
         private void StopResearchClick(object sender, RoutedEventArgs e)
         {
-            _backgroudWorker.CancelAsync();
+            _cancellationTokenSource.Cancel();
+
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         private void RandomizeParamsClick(object sender, RoutedEventArgs e)
