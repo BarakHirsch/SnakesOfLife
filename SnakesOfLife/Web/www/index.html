@@ -17,8 +17,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
-    
-    <script src="components/snakes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-animate.js"></script>
+    <script src="components/snakes.js"></script>
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/snakes.min.css" rel="stylesheet" />
@@ -29,125 +30,6 @@
 </head>
 <body>
     <!-- perhaps add reactive chart to show number of snakes / number of turns (as turns are progressing - show 50 last turns) http://jtblin.github.io/angular-chart.js/ -->
-
-    <div ng-controller="SnakesOfLifeCtrl" class="world">
-
-        <nav>
-            <span class="pull-right"><a href="#" class="btn btn-sm btn-danger" id="nav-close">X</a></span>
-
-            <div class="row" style="margin: 0">
-
-                <div class="center">
-                    <h3 style="padding-bottom: 20px;border-bottom: 1px solid #aaa; margin-top: 10px; font-weight: bold;"> Parameters </h3>
-                    <div class="row" style="margin: 0; border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="col-xs-8 text-left" style="font-size: 12px; font-weight: bold;">
-                            Needed 'Alive Neighbors' Turns To Grow
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="number" class="form-control" min="1" ng-disabled="started || turnsNum != 0" ng-model="parameters.NeededAliveNeighborsTurnsToGrow" />
-                        </div>
-                    </div>
-
-                    <div class="row" style="margin: 0; border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="col-xs-8 text-left" style="font-size: 12px; font-weight: bold;">
-                            Cells Needed For Snake Growth
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="number" min="1" ng-disabled="started || turnsNum != 0" class="form-control" ng-model="parameters.SnakeCellsForGrow" />
-                        </div>
-
-                    </div>
-                    <div class="row" style="margin: 0; border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="col-xs-8 text-left" style="font-size: 12px; font-weight: bold;">
-                            Snake Length For Snake Split
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="number" min="1" ng-disabled="started || turnsNum != 0" class="form-control" ng-model="parameters.SnakeLengthForSplit" />
-                        </div>
-                    </div>
-                    
-                    <div class="row" style="margin: 0; border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="col-xs-8 text-left" style="font-size: 12px; font-weight: bold;">
-                            Snake Length To Stop Moving
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="number" min="1" ng-disabled="started || turnsNum != 0" class="form-control" ng-model="parameters.SnakeLengthToStop" />
-                        </div>
-                    </div>
-                    
-                    <div class="row" style="margin: 0; border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="col-xs-8 text-left" style="font-size: 12px; font-weight: bold;">
-                            Turns Snake Is Not Moving To Die
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="number" min="1" ng-disabled="started || turnsNum != 0" class="form-control" ng-model="parameters.SnakeTurnToDie" />
-                        </div>
-                    </div>
-                    
-                    <div class="row" style="margin: 0; border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="col-xs-8 text-left" style="font-size: 12px; font-weight: bold;">
-                            Turns Snakes Is Hungry To Shrink
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="number" min="1" ng-disabled="started || turnsNum != 0" class="form-control" ng-model="parameters.SnakeTurnsToShrink" />
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </nav>
-
-        <div class="center">
-            <h1>
-                Snakes <small>of</small> Life
-                <!--<small>
-                        (<i class="icon-minus-sign" ng-click="removeRow()"></i>{{nbRows}}<i class="icon-plus-sign" ng-click="addRow()"></i>
-                        x
-                        <i class="icon-minus-sign" ng-click="removeColumn()"></i>{{nbColumns}}<i class="icon-plus-sign" ng-click="addColumn()"></i>)
-                    </small>-->
-            </h1>
-        </div>
-
-        <div class="center">
-            <button class="btn btn-info" ng-click="ruleTheWorld()" ng-hide="started || turnsNum == 0" ng-show="!started && turnsNum!=0">Next Turn</button>
-            <button class="btn btn-success" ng-click="start()" ng-hide="started" ng-show="!started">{{turnsNum === 0 ? "Start" : "Continue"}}</button>
-            <button class="btn btn-warning" ng-click="stop()" ng-hide="!started" ng-show="started">Pause</button>
-            <button class="btn btn-danger" ng-click="reset()">Reset</button>
-            <button id="nav-expander" class="btn btn-primary">Parameters &nbsp;<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
-        </div>
-
-        <br />
-
-        <table class="table" style="max-width: 500px; width: 94%;">
-            <tr ng-repeat="rows in grass track by $index">
-                <td ng-repeat="cell in rows track by $index">
-                    <div class="cell {{cell}}" ng-class="cell == 'Dead' ? 'round short' : ''"></div>
-                </td>
-            </tr>
-        </table>
-        
-        <div class="center" ng-hide="turnsNum==0" ng-show="turnsNum!=0">Turns: {{turnsNum}} | Snakes: {{snakesNum}}</div>
-        <div class="center" ng-hide="turnsNum==0" ng-show="turnsNum!=0">Game GUID = {{gameGuid}}</div>
-
-    </div>
-
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $('#nav-expander').on('click', function (e) {
-                e.preventDefault();
-                $('body').toggleClass('nav-expanded');
-            });
-
-            $('#nav-close').on('click', function (e) {
-                e.preventDefault();
-                $('body').removeClass('nav-expanded');
-            });
-        });
-
-    </script>
-
+    <div class="page {{ pageClass }}" ng-view></div>
 </body>
 </html>
