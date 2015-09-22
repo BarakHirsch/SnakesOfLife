@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 
 namespace Logic.Models
 {
@@ -38,9 +39,9 @@ namespace Logic.Models
             Snakes.Add(snake);
         }
 
-        public void RunToEnd(BackgroundWorker cancellationToken)
+        public void RunToEnd(CancellationToken cancellationToken)
         {
-            while (!HasEnded && !cancellationToken.CancellationPending)
+            while (!HasEnded && !cancellationToken.IsCancellationRequested)
             {
                 RunTurn();
             }
