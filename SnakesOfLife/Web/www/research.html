@@ -1,3 +1,51 @@
-﻿<div class="text-center">
-    Research will come soon
+﻿<div class="center">
+    <h1>Snakes <small>of</small> Life</h1>
 </div>
+<div class="container" ng-controller="researchController">
+    <div class="text-center">
+        <button class="btn btn-success" ng-click="start()" ng-disabled="started">Start research simulation</button>
+        <button class="btn btn-warning" ng-click="stop()" ng-hide="!started" ng-show="started">Stop research</button>
+    </div>
+    <br />
+    <div class="text-center col-sm-6 col-sm-offset-3" style="color: #888; font-size: 10px;">
+        When clicking the start button, the system will automatically randomize parameters and will start running simulations on those parameters.<br />
+    </div>
+    <br /><br />
+    <div class="text-center col-sm-6 col-sm-offset-3">
+        
+        <div class="input-group">
+            <span class="input-group-addon">Maximal Average Turns for params:</span>
+            <input type="text" class="form-control" disabled="disabled" value="{{averageTurns}}" />
+        </div>
+        <span style="color: #888; font-size: 10px;">Once at least one simulation will end, this field will be updated.</span>
+        <br /><br />
+
+        <div class="input-group" style="margin: 5px;">
+            <input type="text" class="form-control" disabled="disabled" value="Needed 'Alive Neighbors' turns to grow:" />
+            <span class="input-group-addon">{{parameters.NeededAliveNeighborsTurnsToGrow}}</span>
+        </div>
+        <div class="input-group" style="margin: 5px;">
+            <input type="text" class="form-control" disabled="disabled" value="Cells needed for snake growth:" />
+            <span class="input-group-addon">{{parameters.SnakeCellsForGrow}}</span>
+        </div>
+        <div class="input-group" style="margin: 5px;">
+            <input type="text" class="form-control" disabled="disabled" value="Snake length for snake split:" />
+            <span class="input-group-addon">{{parameters.SnakeLengthForSplit}}</span>
+        </div>
+        <div class="input-group" style="margin: 5px;">
+            <input type="text" class="form-control" disabled="disabled" value="Snake length to stop moving:" />
+            <span class="input-group-addon">{{parameters.SnakeLengthToStop}}</span>
+        </div>
+        <div class="input-group" style="margin: 5px;">
+            <input type="text" class="form-control" disabled="disabled" value="Turns not moving to die:" />
+            <span class="input-group-addon">{{parameters.SnakeTurnToDie}}</span>
+        </div>
+        <div class="input-group" style="margin: 5px;">
+            <input type="text" class="form-control" disabled="disabled" value="Turns not eaten to shrink:" />
+            <span class="input-group-addon">{{parameters.SnakeTurnsToShrink}}</span>
+        </div>
+        
+        <span style="color: #888; font-size: 10px;">Results will be updated each second.</span><br />
+
+    </div>
+    </div>

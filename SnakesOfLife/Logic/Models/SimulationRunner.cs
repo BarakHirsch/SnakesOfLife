@@ -24,7 +24,7 @@ namespace Logic.Models
             RanOptimizations = new List<ParamsOptimizer>();
         }
 
-        public List<ParamsOptimizer> RanOptimizations { get; }
+        public List<ParamsOptimizer> RanOptimizations { get; set; }
 
         public RunSet LocateMaximalPoint()
         {

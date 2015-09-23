@@ -121,4 +121,79 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
                 $scope.started = false;
             };
         }
-    ]);
+    ])
+.controller('researchController', [
+        '$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+            $scope.started = false;
+            $scope.averageTurns = null;
+            $scope.parameters = { NeededAliveNeighborsTurnsToGrow: null, SnakeCellsForGrow: null, SnakeLengthForSplit: null, SnakeLengthToStop: null, SnakeTurnToDie: null, SnakeTurnsToShrink: null };
+
+            // Compute the next step
+            $scope.getStatus = function () {
+                // do ajax get
+                if ($scope.gameGuid == null)
+                    return;
+
+                $http.get('https://snakesoflife.azurewebsites.net/api/simulation/' + $scope.gameGuid).
+                    success(function (data) {
+                        console.log(data);
+                        $scope.averageTurns = data[0].AverageTurns;
+                        $scope.parameters = data[0].Params;
+                        //if (!$scope.stopping) {
+                        //    $scope.turnsNum++;
+                        //    $scope.snakesNum = data.Snakes.length;
+                        //    //console.log(data.GrassCellsState);
+                        //    $scope.grass = data.GrassCellsState;
+                        //    if (data.HasEnded) {
+                        //        alert("Run Simulation Has Ended");
+                        //        $scope.gameGuid = null;
+                        //        $scope.started = false;
+                        //    }
+                        //}
+                    }).
+                    error(function (data, status, headers, config) {
+                        console.log(data);
+                    });
+            };
+
+            // One step
+            var getSimulationStatus = function () {
+                if ($scope.started) {
+                    $scope.getStatus();
+                    $timeout(getSimulationStatus, 1000);
+                }
+            };
+
+            // start 'auto-step' mode
+            $scope.start = function () {
+
+                // call ajax to post the parameters
+                var dataObj = {};
+
+                // if we allready have a game guid - continue
+                if ($scope.gameGuid == null) {
+
+                    // Simple POST request example (passing data) :
+                    $http.put('https://snakesoflife.azurewebsites.net/api/simulation', dataObj).
+                        success(function (data) {
+                            // we get game guid
+                            $scope.gameGuid = data;
+                            $scope.started = true;
+                            getSimulationStatus();
+                        }).
+                        error(function (data, status, headers, config) {
+                            console.log("error ocurred - " + data);
+                            console.log("Status - " + status);
+                            console.log("Headers - " + headers);
+                        });
+                }
+            };
+
+            // stop 'auto-step' mode
+            $scope.stop = function () {
+                $scope.started = false;
+                $scope.gameGuid = null;
+            };
+        }
+]);

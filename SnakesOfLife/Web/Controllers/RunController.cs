@@ -33,7 +33,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            var runManager = new RunManager(currParams, GameComstants.GridSize, GameComstants.GridSize, new Random());
+            var runManager = new RunManager(currParams, GameConstants.GridSize, GameConstants.GridSize, new Random());
 
             var gameId = Guid.NewGuid().ToString();
 

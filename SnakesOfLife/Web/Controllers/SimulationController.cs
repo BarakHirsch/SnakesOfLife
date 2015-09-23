@@ -4,10 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Logic.Models;
 
 namespace Web.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class SimulationController : ApiController
     {
         public IHttpActionResult Get(string id)
@@ -34,7 +36,7 @@ namespace Web.Controllers
         {
             var cancellationTokenSource = new CancellationTokenSource();
 
-            var simulationRunner = new SimulationRunner(GameComstants.GridSize, GameComstants.GridSize,
+            var simulationRunner = new SimulationRunner(GameConstants.GridSize, GameConstants.GridSize,
                 cancellationTokenSource.Token);
 
             var simulationRunnerHolder = new SimulationRunnerHolder(simulationRunner, cancellationTokenSource);
@@ -56,9 +58,9 @@ namespace Web.Controllers
                 CancellationTokenSource = cancellationTokenSource;
             }
 
-            public SimulationRunner SimulationRunner { get; }
+            public SimulationRunner SimulationRunner { get; set; }
             public Task RunningAction { get; set; }
-            public CancellationTokenSource CancellationTokenSource { get; }
+            public CancellationTokenSource CancellationTokenSource { get; set; }
 
             public void StartNewRun()
             {
