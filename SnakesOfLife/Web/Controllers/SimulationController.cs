@@ -64,7 +64,7 @@ namespace Web.Controllers
 
             public void StartNewRun()
             {
-                RunningAction = Task.Factory.StartNew(() => SimulationRunner.LocateMaximalPoint());
+                RunningAction = Task.Factory.StartNew(() => SimulationRunner.LocateMaximalPoint(), TaskCreationOptions.LongRunning);
             }
         }
     }
