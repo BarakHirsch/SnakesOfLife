@@ -108,16 +108,10 @@ namespace UI
             {
                 simulationRunner.LocateMaximalPoint();
 
-                _backgroudWorker.ReportProgress(0, GetMaxRun(simulationRunner));
+                _backgroudWorker.ReportProgress(0, simulationRunner.TopRun);
             }
 
-            e.Result = GetMaxRun(simulationRunner);
-        }
-
-        private static RunSet GetMaxRun(SimulationRunner simulationRunner)
-        {
-            var runSets = simulationRunner.RanOptimizations.Select(x => x.MaximalRun).OrderBy(x => x.AverageTurns);
-            return runSets.FirstOrDefault();
+            e.Result = simulationRunner.TopRun;
         }
 
         private void _backgroudWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

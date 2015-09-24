@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Logic.Models
@@ -25,6 +26,11 @@ namespace Logic.Models
         }
 
         public List<ParamsOptimizer> RanOptimizations { get; set; }
+
+        public RunSet TopRun
+        {
+            get { return RanOptimizations.Select(x => x.MaximalRun).OrderBy(x => x.AverageTurns).FirstOrDefault(); }
+        }
 
         public RunSet LocateMaximalPoint()
         {

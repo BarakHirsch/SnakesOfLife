@@ -29,7 +29,8 @@ namespace Web.Controllers
                 simulationRunnerHolder.StartNewRun();
             }
 
-            return Json(simulationRunnerHolder.SimulationRunner.RanOptimizations.Select(x => x.MaximalRun).OrderBy(x => x.AverageTurns).ToArray());
+            var firstOrDefault = simulationRunnerHolder.SimulationRunner.TopRun;
+            return Json(firstOrDefault);
         }
 
         public IHttpActionResult Put()
