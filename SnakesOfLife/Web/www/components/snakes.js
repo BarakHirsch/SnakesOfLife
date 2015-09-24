@@ -149,6 +149,7 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
                         console.log(data);
                         $scope.averageTurns = data.AverageTurns;
                         $scope.parameters = data.Params;
+                        $timeout(getSimulationStatus, 2000);
                         //if (!$scope.stopping) {
                         //    $scope.turnsNum++;
                         //    $scope.snakesNum = data.Snakes.length;
@@ -170,7 +171,7 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
             var getSimulationStatus = function () {
                 if ($scope.started) {
                     $scope.getStatus();
-                    $timeout(getSimulationStatus, 2000);
+               
                 }
             };
 

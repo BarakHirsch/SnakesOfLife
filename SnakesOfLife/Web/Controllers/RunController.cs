@@ -84,8 +84,10 @@ namespace Web.Controllers
                         RowIndex = location.RowIndex,
                         ColumnIndex = location.ColumnIndex
                     });
-
-                    grassCells[location.RowIndex, location.ColumnIndex] = "Snake";
+                    if (grassCells[location.RowIndex, location.ColumnIndex] == "Live")
+                        grassCells[location.RowIndex, location.ColumnIndex] = "Live_Snake";
+                    if (grassCells[location.RowIndex, location.ColumnIndex] == "Dead")
+                        grassCells[location.RowIndex, location.ColumnIndex] = "Dead_Snake";
                 }
 
                 snakes.Add(snakeDto);

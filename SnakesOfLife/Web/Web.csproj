@@ -160,6 +160,7 @@
     <Content Include="www\img\dead.jpg" />
     <Content Include="www\img\snake.jpg" />
     <Content Include="www\about.html" />
+    <Content Include="www\img\snakelive.jpg" />
     <Content Include="www\research.html" />
     <Content Include="www\main.html" />
     <Content Include="www\index.html" />

@@ -40,8 +40,14 @@
     background-repeat:repeat;
 }
 
-.cell.Snake {
+.cell.Dead_Snake {
     background-image:url('../img/snake.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.cell.Live_Snake {
+    background-image:url('../img/snakelive.jpg');
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
