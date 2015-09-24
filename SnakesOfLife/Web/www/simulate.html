@@ -1,5 +1,5 @@
 ﻿<div ng-controller="SnakesOfLifeCtrl" class="world">
-    <nav>
+    <nav id="nvParams">
         <span class="pull-right"><a href="#" class="btn btn-sm btn-danger" id="nav-close">X</a></span>
         <div class="row" style="margin: 0">
             <div class="center">
@@ -59,21 +59,15 @@
         </div>
     </nav>
     <div class="center">
-        <h1>
-            Snakes <small>of</small> Life
-            <!--<small>
-                    (<i class="icon-minus-sign" ng-click="removeRow()"></i>{{nbRows}}<i class="icon-plus-sign" ng-click="addRow()"></i>
-                    x
-                    <i class="icon-minus-sign" ng-click="removeColumn()"></i>{{nbColumns}}<i class="icon-plus-sign" ng-click="addColumn()"></i>)
-                </small>-->
-        </h1>
+        <h2>SNAKES <sup style="font-size: 16px; color: #aaa;">OF</sup> LIFE</h2>
     </div>
     <div class="center">
+        <button class="btn btn-info" ng-click="back()">Back</button>
         <button class="btn btn-info" ng-click="ruleTheWorld()" ng-hide="started || turnsNum == 0" ng-show="!started && turnsNum!=0">Next Turn</button>
         <button class="btn btn-success" ng-click="start()" ng-hide="started" ng-show="!started">{{turnsNum === 0 ? "Start" : "Continue"}}</button>
         <button class="btn btn-warning" ng-click="stop()" ng-hide="!started" ng-show="started">Pause</button>
         <button class="btn btn-danger" ng-click="reset()">Reset</button>
-        <button id="nav-expander" class="btn btn-primary">Parameters &nbsp;<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
+        <button id="nav-expander" class="btn btn-primary">Params &nbsp;<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
     </div>
     <br />
     <table class="table" style="max-width: 500px; width: 94%;">

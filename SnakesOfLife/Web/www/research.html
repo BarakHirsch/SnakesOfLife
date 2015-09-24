@@ -1,8 +1,9 @@
 ﻿<div class="center">
-    <h1>Snakes <small>of</small> Life</h1>
+    <h2>SNAKES <sup style="font-size: 16px; color: #aaa;">OF</sup> LIFE</h2>
 </div>
 <div class="container" ng-controller="researchController">
     <div class="text-center">
+        <button class="btn btn-info" ng-click="back()">Back</button>
         <button class="btn btn-success" ng-click="start()" ng-disabled="started">Start research simulation</button>
         <button class="btn btn-warning" ng-click="stop()" ng-hide="!started" ng-show="started">Stop research</button>
     </div>
@@ -15,7 +16,7 @@
         
         <div class="input-group">
             <span class="input-group-addon">Maximal Average Turns for params:</span>
-            <input type="text" class="form-control" disabled="disabled" value="{{averageTurns}}" />
+            <input type="text" class="form-control" disabled="disabled" value="{{averageTurns | number: 0}}" />
         </div>
         <span style="color: #888; font-size: 10px;">Once at least one simulation will end, this field will be updated.</span>
         <br /><br />
@@ -45,7 +46,7 @@
             <span class="input-group-addon">{{parameters.SnakeTurnsToShrink}}</span>
         </div>
         
-        <span style="color: #888; font-size: 10px;">Results will be updated each second.</span><br />
+        <span style="color: #888; font-size: 10px;">Results will be updated every 2 seconds.</span><br />
 
     </div>
     </div>

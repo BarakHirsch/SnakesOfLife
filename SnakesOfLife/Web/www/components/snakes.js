@@ -38,9 +38,14 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
 
             $scope.grass = [['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live'], ['Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live', 'Live']];
 
+            $scope.back = function () {
+                $('#nvParams').hide();
+                $scope.reset();
+                window.history.back();
+            };
+
             $scope.reset = function() {
                 $scope.stopping = true;
-                $scope.$apply();
                 $scope.gameGuid = null;
                 $scope.turnsNum = 0;
                 $scope.snakesNum = 0;
@@ -129,6 +134,10 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
             $scope.averageTurns = null;
             $scope.parameters = { NeededAliveNeighborsTurnsToGrow: null, SnakeCellsForGrow: null, SnakeLengthForSplit: null, SnakeLengthToStop: null, SnakeTurnToDie: null, SnakeTurnsToShrink: null };
 
+            $scope.back = function () {
+                $scope.stop();
+                window.history.back();
+            };
             // Compute the next step
             $scope.getStatus = function () {
                 // do ajax get
@@ -161,12 +170,14 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
             var getSimulationStatus = function () {
                 if ($scope.started) {
                     $scope.getStatus();
-                    $timeout(getSimulationStatus, 1000);
+                    $timeout(getSimulationStatus, 2000);
                 }
             };
 
             // start 'auto-step' mode
             $scope.start = function () {
+
+                $scope.started = true;
 
                 // call ajax to post the parameters
                 var dataObj = {};
@@ -179,13 +190,13 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
                         success(function (data) {
                             // we get game guid
                             $scope.gameGuid = data;
-                            $scope.started = true;
                             getSimulationStatus();
                         }).
                         error(function (data, status, headers, config) {
                             console.log("error ocurred - " + data);
                             console.log("Status - " + status);
                             console.log("Headers - " + headers);
+                            $scope.started = false;
                         });
                 }
             };

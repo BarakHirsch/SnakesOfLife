@@ -14,7 +14,7 @@ namespace Web
         public static void Register(HttpConfiguration config)
         {
             // Other configuration omitted
-            config.EnableCors();
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
             
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
