@@ -1,24 +1,26 @@
 ﻿<div class="center">
     <h2>SNAKES <sup style="font-size: 16px; color: #aaa;">OF</sup> LIFE</h2>
 </div>
-<div class="container" ng-controller="researchController">
-    <div class="text-center">
+<div class="container-fluid" ng-controller="researchController">
+    <div class="text-center col-sm-6 col-sm-offset-3" style="margin-top: 10px; padding-top: 10px; margin-bottom: 10px; border-top: 1px solid #ccc;">
         <button class="btn btn-info" ng-click="back()">Back</button>
         <button class="btn btn-success" ng-click="start()" ng-disabled="started">Start Research</button>
-        <button class="btn btn-warning" ng-click="stop()" ng-hide="!started" ng-show="started">Stop Research</button>
+        <button class="btn btn-danger" ng-click="stop()" ng-hide="!started" ng-show="started">Stop</button>
     </div>
     <br />
-    <div class="text-center col-sm-6 col-sm-offset-3" style="color: #888; font-size: 10px;">
-        When clicking the start button, the system will automatically randomize parameters and will start running simulations on those parameters.<br />
+    <div class="text-center col-sm-6 col-sm-offset-3" style="color: #888; font-size: 10px; margin-bottom: 10px;">
+        When clicking the start button, the system will automatically randomize parameters and will start running simulations on those parameters.
     </div>
-    <br /><br />
+
     <div class="text-center col-sm-6 col-sm-offset-3">
-        
         <div class="input-group">
-            <span class="input-group-addon">Maximal Average Turns for params:</span>
-            <input type="text" class="form-control" disabled="disabled" value="{{averageTurns | number: 0}}" />
+            <span class="input-group-addon" style="cursor: pointer;">
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-container="body" data-toggle="popover" data-placement="right" data-content="Average of maximal turns in different simulations for the same randomized parameters."></span>
+            </span>
+            <input type="text" class="form-control" disabled="disabled" value="Average Turns:" />
+            <span class="input-group-addon">{{averageTurns | number: 0}}</span>
         </div>
-        <span style="color: #888; font-size: 10px;">Once at least one simulation will end, this field will be updated.</span>
+        <span style="color: #888; font-size: 9px;">Once at least one simulation ends, this field will be updated.</span>
         <br /><br />
 
         <div class="input-group" style="margin: 5px;">
@@ -45,8 +47,8 @@
             <input type="text" class="form-control" disabled="disabled" value="Turns not eaten to shrink:" />
             <span class="input-group-addon">{{parameters.SnakeTurnsToShrink}}</span>
         </div>
-        
+
         <span style="color: #888; font-size: 10px;">Results will be updated every 2 seconds.</span><br />
 
     </div>
-    </div>
+</div>

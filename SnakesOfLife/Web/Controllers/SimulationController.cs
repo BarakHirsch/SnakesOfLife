@@ -45,7 +45,8 @@ namespace Web.Controllers
                 cancellationTokenSource.Token);
 
             var simulationRunnerHolder = new SimulationRunnerHolder(simulationRunner, cancellationTokenSource);
-
+            
+            simulationRunnerHolder.LastActiveGet = DateTime.Now;
             simulationRunnerHolder.StartNewRun();
 
             var gameId = Guid.NewGuid().ToString();

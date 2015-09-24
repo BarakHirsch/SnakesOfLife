@@ -147,8 +147,8 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
                 $http.get('https://snakesoflife.azurewebsites.net/api/simulation/' + $scope.gameGuid).
                     success(function (data) {
                         console.log(data);
-                        $scope.averageTurns = data[0].AverageTurns;
-                        $scope.parameters = data[0].Params;
+                        $scope.averageTurns = data.AverageTurns;
+                        $scope.parameters = data.Params;
                         //if (!$scope.stopping) {
                         //    $scope.turnsNum++;
                         //    $scope.snakesNum = data.Snakes.length;
@@ -206,5 +206,7 @@ angular.module('SnakesOfLife', ['ngRoute', 'ngAnimate'])
                 $scope.started = false;
                 $scope.gameGuid = null;
             };
-        }
+
+        $('[data-toggle="popover"]').popover();
+    }
 ]);
