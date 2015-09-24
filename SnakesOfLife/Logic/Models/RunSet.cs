@@ -29,7 +29,7 @@ namespace Logic.Models
         {
             var runManagers = new List<RunManager>();
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 3; i++)
             {
                 runManagers.Add(new RunManager(Params, _rowLength, _columnLength, new Random(_random.Next())));
             }

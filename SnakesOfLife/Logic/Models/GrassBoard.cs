@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Logic.Extensions;
 
 namespace Logic.Models
@@ -33,17 +34,93 @@ namespace Logic.Models
 
         public void UpdateGrass()
         {
-            var predicateResult = GrassCells.GetPredicateResult(x => x.IsAlive);
-
             for (int i = 0; i < RowLength; i++)
             {
                 for (int j = 0; j < ColumnLength; j++)
                 {
                     var grassCell = GrassCells[i][j];
 
-                    grassCell.UpdateGrowth(predicateResult.GetNeighbors(i, j).Count(x => x));
+                    grassCell.UpdateGrowth(CountAlive(GrassCells, i, j));
                 }
             }
+        }
+
+        private int CountAlive(GrassCell[][] board, int rowIndex, int columnIndex)
+        {
+            int result = 0;
+            GrassCell[] row;
+
+            if (rowIndex < board.Length - 1)
+            {
+                row = board[rowIndex + 1];
+
+                if (columnIndex < row.Length - 1)
+                {
+                    if (row[columnIndex + 1].IsAlive)
+                    {
+                        result++;
+                    }
+                }
+
+                if (columnIndex > 0)
+                {
+                    if (row[columnIndex - 1].IsAlive)
+                    {
+                        result++;
+                    }
+                }
+
+                if (row[columnIndex].IsAlive)
+                {
+                    result++;
+                }
+            }
+
+            if (rowIndex > 0)
+            {
+                row = board[rowIndex - 1];
+
+                if (columnIndex < row.Length - 1)
+                {
+                    if (row[columnIndex + 1].IsAlive)
+                    {
+                        result++;
+                    }
+                }
+
+                if (columnIndex > 0)
+                {
+                    if (row[columnIndex - 1].IsAlive)
+                    {
+                        result++;
+                    }
+                }
+
+                if (row[columnIndex].IsAlive)
+                {
+                    result++;
+                }
+            }
+
+            row = board[rowIndex];
+
+            if (columnIndex < row.Length - 1)
+            {
+                if (board[rowIndex][columnIndex + 1].IsAlive)
+                {
+                    result++;
+                }
+            }
+
+            if (columnIndex > 0)
+            {
+                if (board[rowIndex][columnIndex - 1].IsAlive)
+                {
+                    result++;
+                }
+            }
+
+            return result;
         }
 
         public bool CellEntered(int row, int column)
